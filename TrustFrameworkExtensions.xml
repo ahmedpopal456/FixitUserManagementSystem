@@ -12,9 +12,10 @@
     <TenantId>fixitb2ctest.onmicrosoft.com</TenantId>
     <PolicyId>B2C_1A_TrustFrameworkBase</PolicyId>
   </BasePolicy>
- <BuildingBlocks>
 
-  <ClaimsSchema>
+  <BuildingBlocks>
+
+    <ClaimsSchema>
 
       <ClaimType Id="address1">
         <DisplayName>Address Line 1 (required)</DisplayName>
@@ -56,6 +57,19 @@
       </ClaimType>
 
     </ClaimsSchema>
+
+    <ContentDefinitions>
+
+      <ContentDefinition Id="api.signin">
+        <LoadUri>~/tenant/templates/AzureBlue/unified.cshtml</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:unifiedssp:1.0.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Signin</Item>
+        </Metadata>
+      </ContentDefinition>
+    
+    </ContentDefinitions>
 
   </BuildingBlocks>
 
@@ -108,7 +122,7 @@
 
     <UserJourney Id="SignIn">
       <OrchestrationSteps>
-        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signuporsignin">
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signin">
           <ClaimsProviderSelections>
             <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
           </ClaimsProviderSelections>
