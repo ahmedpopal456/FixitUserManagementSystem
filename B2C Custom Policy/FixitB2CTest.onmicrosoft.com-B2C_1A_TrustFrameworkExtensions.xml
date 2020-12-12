@@ -57,17 +57,19 @@
 
     </ClaimsSchema>
 
-    <ContentDefinition Id="api.localaccountsignup">
-        <LoadUri>https://storageaccountleung9918.blob.core.windows.net/jleung-blob/signup-client.html</LoadUri>
-        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
-        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
-        <Metadata>
-          <Item Key="DisplayName">Local account sign up page</Item>
-        </Metadata>
-        <LocalizedResourcesReferences MergeBehavior="Prepend">
-          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
-        </LocalizedResourcesReferences>
-    </ContentDefinition>
+    <ContentDefinitions>
+      <ContentDefinition Id="api.localaccountsignup">
+          <LoadUri>https://storageaccountleung9918.blob.core.windows.net/jleung-blob/signup-client.html</LoadUri>
+          <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+          <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+          <Metadata>
+            <Item Key="DisplayName">Local account sign up page</Item>
+          </Metadata>
+          <LocalizedResourcesReferences MergeBehavior="Prepend">
+            <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
+          </LocalizedResourcesReferences>
+      </ContentDefinition>
+    </ContentDefinitions>
 
     <Localization Enabled="true">
       <SupportedLanguages DefaultLanguage="en">
@@ -80,7 +82,6 @@
           <LocalizedString ElementType="UxElement" StringId="button_continue">Next</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-
     </Localization>
 
   </BuildingBlocks>
