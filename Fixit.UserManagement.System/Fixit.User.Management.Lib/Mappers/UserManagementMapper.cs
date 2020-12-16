@@ -11,6 +11,11 @@ namespace Fixit.User.Management.Lib.Mappers
   {
     public UserManagementMapper()
     {
+      #region UserAccountConfiguration
+      #endregion
+
+      #region UserProfileConfiguration
+      #endregion
     }
   }
 }
