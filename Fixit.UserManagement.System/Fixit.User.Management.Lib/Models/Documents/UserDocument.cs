@@ -11,8 +11,6 @@ namespace Fixit.User.Management.Lib.Models.Documents
 {
   public class UserDocument : DocumentBase
   {
-    public Guid Id { get; set; }
-
     public string UserPrincipalName { get; set; }
 
     public string ProfilePictureUrl { get; set; }
