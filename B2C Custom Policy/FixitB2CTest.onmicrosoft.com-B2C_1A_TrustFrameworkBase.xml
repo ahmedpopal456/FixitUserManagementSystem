@@ -752,8 +752,8 @@
           <OutputClaims>
             <OutputClaim ClaimTypeReferenceId="objectId" />
             <!-- Optional claims, to be collected from the user -->
-            <OutputClaim ClaimTypeReferenceId="givenName" />
-            <OutputClaim ClaimTypeReferenceId="surName" />
+            <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="surName" Required="true" />
             <!-- End of optional claims -->
             <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
             <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
