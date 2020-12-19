@@ -5,11 +5,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\Joanna\.nuget\packages\fixit.core.database\1.0.0-alpha61-3\contentFiles\any\netcoreapp3.1\ThirdPartyNotice.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Adapters\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Fixit.Core.Database" Version="1.0.11-beta" />
+    <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.0-118-11" />
   </ItemGroup>
 
 </Project>

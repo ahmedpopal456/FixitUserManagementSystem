@@ -1,10 +1,10 @@
-﻿using Fixit.Core.Security.Authorization.AzureFunctions.Extensions;
+﻿// using Fixit.Core.Security.Authorization.AzureFunctions.Extensions;
 using Microsoft.Azure.WebJobs.Hosting;
 
-[assembly: WebJobsStartup(typeof(AccessExtension))]
+//[assembly: WebJobsStartup(typeof(AccessExtension))]
 namespace Fixit.User.Management.ServerlessApi
 {
-  class AssemblyInfo
+  public class AssemblyInfo
   {
   }
 }

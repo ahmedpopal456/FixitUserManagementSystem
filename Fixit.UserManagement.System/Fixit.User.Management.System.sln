@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.ServerlessApi", "Fixit.UserManagement.ServerlessApi\Fixit.User.Management.ServerlessApi.csproj", "{61BEB041-25CE-40B4-9966-1A89C433F9B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixit.User.Management.Lib", "Fixit.User.Management.Lib\Fixit.User.Management.Lib.csproj", "{6F71E49D-6295-41EE-90B1-7C2FF6BE4472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.Lib", "Fixit.User.Management.Lib\Fixit.User.Management.Lib.csproj", "{6F71E49D-6295-41EE-90B1-7C2FF6BE4472}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixit.User.Management.Triggers", "Fixit.User.Management.Triggers\Fixit.User.Management.Triggers.csproj", "{2C1AEABE-B38A-4FAD-BF10-876AEA9E73C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.Triggers", "Fixit.User.Management.Triggers\Fixit.User.Management.Triggers.csproj", "{2C1AEABE-B38A-4FAD-BF10-876AEA9E73C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixit.User.Management.Lib.UnitTests", "Fixit.User.Management.Lib.UnitTests\Fixit.User.Management.Lib.UnitTests.csproj", "{59EDD94E-E079-4CA6-AEEE-F12F514CED6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.Lib.UnitTests", "Fixit.User.Management.Lib.UnitTests\Fixit.User.Management.Lib.UnitTests.csproj", "{59EDD94E-E079-4CA6-AEEE-F12F514CED6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

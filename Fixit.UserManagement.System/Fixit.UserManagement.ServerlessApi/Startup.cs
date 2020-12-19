@@ -6,6 +6,8 @@ using Fixit.User.Management.ServerlessApi;
 using Fixit.User.Management.Lib.Mappers;
 using Fixit.User.Management.Lib.Mediators;
 using Fixit.User.Management.Lib.Mediators.Internal;
+using Fixit.Core.Database;
+using Fixit.Core.Database.Mediators;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace Fixit.User.Management.ServerlessApi
@@ -24,7 +26,10 @@ namespace Fixit.User.Management.ServerlessApi
         mc.AddProfile(new UserManagementMapper());
       });
 
+      DatabaseFactory factory = new DatabaseFactory(_configuration["FIXIT-CDB-EP"], _configuration["FIXIT-CDB-CS"]);
+
       builder.Services.AddSingleton<IMapper>(mapperConfig.CreateMapper());
+      builder.Services.AddSingleton<IDatabaseMediator>(factory.CreateCosmosClient());
       builder.Services.AddTransient<IUserMediator, UserMediator>();
     }
   }
