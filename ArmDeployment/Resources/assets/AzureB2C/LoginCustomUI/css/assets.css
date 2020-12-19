@@ -1,0 +1,16 @@
+
+body {
+    background-image: url("background-left.png");
+}
+
+#FacebookExchange {
+    background-image: url(facebook-colored.svg);
+}
+
+    #FacebookExchange:hover {
+        background-image: url(facebook-white.svg);
+    }
+
+.buttons #cancel:before {
+    content: url(../../assets/images/left-arrow.svg);
+}
