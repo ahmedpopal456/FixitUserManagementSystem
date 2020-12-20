@@ -3,7 +3,7 @@ html {
 }
 
 body {
-    font-family: Segoe UI,SegoeUI,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: 'Raleway', sans-serif;
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -68,7 +68,7 @@ ul {
 }
 /** Social Button Styles **/
 #SignInWithLogonNameExchange {
-    background-color: #296ec6;
+    background-color: #FFD14A;
     background-image: url(none);
     background-size: 10%;
     background-position-x: 95%;
@@ -129,11 +129,11 @@ ul {
     margin: 0 auto;
     width: 60%;
     height: 50px;
-    background-color: #296ec6;
+    background-color: #FFD14A;
     opacity: .3;
     border-radius: 0.5rem;
     border: none;
-    color: white;
+    color: #1D1F2A;
     font-size: 1em;
 }
 
@@ -141,11 +141,11 @@ ul {
     margin: 0 auto;
     width: 60%;
     height: 50px;
-    background-color: #296ec6;
+    background-color: #FFD14A;
     opacity: 1;
     border-radius: 0.5rem;
     border: none;
-    color: white;
+    color: #1D1F2A;
     font-size: 1em;
     box-shadow: 0 0px 30px 0px #dae1f7;
 }
@@ -154,8 +154,9 @@ ul {
         -moz-box-shadow: none;
         -webkit-box-shadow: none;
         box-shadow: none;
-        background-color: #1662c7;
-        border-color: #204d74;
+        background-color: #FFC812;
+        border-color: #f1bc0b;
+        color: #1D1F2A !important;
     }
 
 .buttons #cancel {
@@ -255,27 +256,29 @@ label {
     #attributeList ul li .attrEntry .verify #email_ver_but_send {
         width: 60%;
         height: 50px;
-        background-color: #296ec6;
-        color: white;
+        background-color: #FFD14A;
+        color: #1D1F2A;
         border-radius: 0.5rem;
     }
 
         #attributeList ul li .attrEntry .verify #email_ver_but_send:hover {
-            background-color: #1662c7;
+            background-color: #FFC812;
+            color: #1D1F2A !important;
         }
 
     #attributeList ul li .attrEntry .verify #email_ver_but_verify {
         width: inherit;
         padding: 0px 20px;
         height: 50px;
-        background-color: #296ec6;
-        color: white;
+        background-color: #FFD14A;
+        color: #1D1F2A;
         margin-right: 5px;
         border-radius: 0.5rem;
     }
 
         #attributeList ul li .attrEntry .verify #email_ver_but_verify:hover {
-            background-color: #1662c7;
+            background-color: #FFC812;
+            color: #1D1F2A !important;
         }
 
     #attributeList ul li .attrEntry .verify #email_ver_but_resend {
@@ -286,26 +289,28 @@ label {
         height: 50px;
         right: 0;
         bottom: -38px;
-        background-color: #296ec6;
-        color: white;
+        background-color: #FFD14A;
+        color: #1D1F2A;
         border-radius: 0.5rem;
     }
 
         #attributeList ul li .attrEntry .verify #email_ver_but_resend:hover {
-            background-color: #1662c7;
+            background-color: #FFC812;
+            color: #1D1F2A !important;
         }
 
     #attributeList ul li .attrEntry .verify #email_ver_but_edit {
         border: none;
-        color: white;
-        background-color: #296ec6;
+        color: #1D1F2A;
+        background-color: #FFD14A;
         width: 60%;
         height: 50px;
         border-radius: 0.5rem;
     }
 
         #attributeList ul li .attrEntry .verify #email_ver_but_edit:hover {
-            background-color: #1662c7;
+            background-color: #FFC812;
+            color: #1D1F2A !important;
         }
 
     #attributeList ul li .attrEntry .verify #email_ver_input_label {
