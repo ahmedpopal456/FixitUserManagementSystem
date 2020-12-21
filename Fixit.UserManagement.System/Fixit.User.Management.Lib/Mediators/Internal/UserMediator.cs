@@ -23,18 +23,18 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
                         IDatabaseMediator databaseMediator,
                         IConfiguration configurationProvider)
     {
-      var databaseName = configurationProvider["FIXIT-UMS-USERDB"];
-      var databaseUserTableName = configurationProvider["FIXIT-UMS-USERTABLE"];
+      var databaseName = configurationProvider["FIXIT-UM-USERDB"];
+      var databaseUserTableName = configurationProvider["FIXIT-UM-USERTABLE"];
       _configuration = configurationProvider;
 
       if (string.IsNullOrWhiteSpace(databaseName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Database as {{FIXIT-UMS-USERDB}} ");
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Database as {{FIXIT-UM-USERDB}} ");
       }
 
       if (string.IsNullOrWhiteSpace(databaseUserTableName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Table as {{FIXIT-UMS-USERTABLE}} ");
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Table as {{FIXIT-UM-USERTABLE}} ");
       }
 
       if (databaseMediator == null)
@@ -98,7 +98,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         userDocument.Address = userProfileInformationDto.Address;
       }
 
-      string partitionKey = userDocument.Role == UserRole.Client ? _configuration["FIXIT-UMS-CLIENTPK"] : _configuration["FIXIT-UMS-CRAFTSMANPK"];
+      string partitionKey = userDocument.Role == UserRole.Client ? _configuration["FIXIT-UM-CLIENTPK"] : _configuration["FIXIT-UM-CRAFTSMANPK"];
 
       OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, partitionKey, cancellationToken);
       if (status.OperationException != null)

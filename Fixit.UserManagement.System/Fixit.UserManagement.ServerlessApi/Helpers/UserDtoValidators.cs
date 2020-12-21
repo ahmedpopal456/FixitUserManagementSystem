@@ -1,11 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Fixit.Core.DataContracts.Users;
 using System.Net.Http;
-using Fixit.User.Management.Lib.Models.Profile;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
+using Fixit.Core.DataContracts.Users.Address;
 
 namespace Fixit.User.Management.ServerlessApi.Helpers
 {
@@ -33,7 +30,9 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
         var userProfileInformationDeserialized = JsonConvert.DeserializeObject<UpdateUserProfileRequestDto>(httpContent.ReadAsStringAsync().Result);
         if (userProfileInformationDeserialized != null)
         {
-          isValid = userProfileInformationDeserialized.FirstName != null || userProfileInformationDeserialized.LastName != null || userProfileInformationDeserialized.Address != null;
+
+          bool isValidAddress = userProfileInformationDeserialized.Address != null && !HasNullOrEmpty(userProfileInformationDeserialized.Address);
+          isValid = !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.FirstName) && !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.LastName) && isValidAddress;
 
           if (isValid)
           {
@@ -47,6 +46,16 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
         // Fall through 
       }
       return isValid;
+    }
+
+    public static bool HasNullOrEmpty(AddressDto addressDto)
+    {
+      return string.IsNullOrWhiteSpace(addressDto.Address)
+             || string.IsNullOrWhiteSpace(addressDto.City)
+             || string.IsNullOrWhiteSpace(addressDto.Province)
+             || string.IsNullOrWhiteSpace(addressDto.Country)
+             || string.IsNullOrWhiteSpace(addressDto.PostalCode)
+             || string.IsNullOrWhiteSpace(addressDto.PhoneNumber);
     }
     #endregion
   }

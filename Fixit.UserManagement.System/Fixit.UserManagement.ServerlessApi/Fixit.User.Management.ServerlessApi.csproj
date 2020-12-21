@@ -23,9 +23,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Functions\OpenApi\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Fixit.User.Management.Lib\Fixit.User.Management.Lib.csproj" />
   </ItemGroup>
 </Project>
