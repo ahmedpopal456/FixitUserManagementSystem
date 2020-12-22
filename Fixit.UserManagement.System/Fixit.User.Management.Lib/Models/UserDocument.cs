@@ -8,7 +8,7 @@ using Fixit.Core.DataContracts.Users.Documents;
 using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Ratings;
 
-namespace Fixit.User.Management.Lib.Models.Documents
+namespace Fixit.User.Management.Lib.Models
 {
   [DataContract]
   public class UserDocument : DocumentBase

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -8,7 +9,7 @@ using Fixit.Core.Database.Mediators;
 using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
 using Fixit.Core.DataContracts.Users.Profile;
-using Fixit.User.Management.Lib.Models.Documents;
+using Fixit.User.Management.Lib.Models;
 using Microsoft.Extensions.Configuration;
 
 namespace Fixit.User.Management.Lib.Mediators.Internal
@@ -55,16 +56,17 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       cancellationToken.ThrowIfCancellationRequested();
       UserProfileDto result = default(UserProfileDto);
 
-      (DocumentCollectionDto<UserDocument> userDocumentCollection, string ContinuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, i => i.id == userId.ToString());
+      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
+        if (userDocumentCollection.IsOperationSuccessful)
+        {
+          result.IsOperationSuccessful = true;
+          result = _mapper.Map<UserDocument, UserProfileDto>(userDocumentCollection.Results.SingleOrDefault());
+        }
         if (userDocumentCollection.OperationException != null)
         {
-          throw userDocumentCollection.OperationException;
-        }
-        if (userDocumentCollection.IsOperationSuccessful && userDocumentCollection.Results.Count != default(int))
-        {
-          result = _mapper.Map<UserDocument, UserProfileDto>(userDocumentCollection.Results[0]);
+          result.OperationException = userDocumentCollection.OperationException;
         }
       }
       return result;
@@ -75,31 +77,30 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       cancellationToken.ThrowIfCancellationRequested();
       UserProfileInformationDto result = default(UserProfileInformationDto);
 
-      (DocumentCollectionDto<UserDocument> userDocumentCollection, string ContinuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, i => i.id == userId.ToString());
+      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
-        if (userDocumentCollection.OperationException != null)
+        if (userDocumentCollection.IsOperationSuccessful)
         {
-          throw userDocumentCollection.OperationException;
-        }
-        if (userDocumentCollection.IsOperationSuccessful && userDocumentCollection.Results.Count != default(int))
-        {
-          UserDocument userDocument = userDocumentCollection.Results[0];
+          UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
           userDocument.FirstName = userProfileUpdateRequestDto.FirstName;
           userDocument.LastName = userProfileUpdateRequestDto.LastName;
           userDocument.Address = userProfileUpdateRequestDto.Address;
 
-          string partitionKey = userDocument.Role == UserRole.Client ? _configuration["FIXIT-UM-DB-CLIENTPK"] : _configuration["FIXIT-UM-DB-CRAFTSMANPK"];
-
-          OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, partitionKey, cancellationToken);
-          if (status.OperationException != null)
-          {
-            throw status.OperationException;
-          }
+          OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
           if (status.IsOperationSuccessful)
           {
+            result.IsOperationSuccessful = true;
             result = _mapper.Map<UserDocument, UserProfileInformationDto>(userDocument);
           }
+          if (status.OperationException != null)
+          {
+            result.OperationException = status.OperationException;
+          }
+        }
+        if (userDocumentCollection.OperationException != null)
+        {
+          result.OperationException = userDocumentCollection.OperationException;
         }
       }
       return result;
@@ -110,29 +111,28 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       cancellationToken.ThrowIfCancellationRequested();
       UserProfilePictureDto result = default(UserProfilePictureDto);
 
-      (DocumentCollectionDto<UserDocument> userDocumentCollection, string ContinuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, i => i.id == userId.ToString());
+      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
-        if (userDocumentCollection.OperationException != null)
+        if (userDocumentCollection.IsOperationSuccessful)
         {
-          throw userDocumentCollection.OperationException;
-        }
-        if (userDocumentCollection.IsOperationSuccessful && userDocumentCollection.Results.Count != default(int))
-        {
-          UserDocument userDocument = userDocumentCollection.Results[0];
+          UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
           userDocument.ProfilePictureUrl = userProfilePictureUpdateRequestDto.ProfilePictureUrl;
 
-          string partitionKey = userDocument.Role == UserRole.Client ? _configuration["FIXIT-UM-DB-CLIENTPK"] : _configuration["FIXIT-UM-DB-CRAFTSMANPK"];
-
-          OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, partitionKey, cancellationToken);
-          if (status.OperationException != null)
-          {
-            throw status.OperationException;
-          }
+          OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
           if (status.IsOperationSuccessful)
           {
+            result.IsOperationSuccessful = true;
             result = _mapper.Map<UserDocument, UserProfilePictureDto>(userDocument);
           }
+          if (status.OperationException != null)
+          {
+            result.OperationException = status.OperationException;
+          }
+        }
+        if (userDocumentCollection.OperationException != null)
+        {
+          result.OperationException = userDocumentCollection.OperationException;
         }
       }
       return result;

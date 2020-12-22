@@ -31,19 +31,19 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
     [OpenApiOperation("get", "UserProfile")]
     [OpenApiParameter("id", In = ParameterLocation.Path, Required = true, Type = typeof(Guid))]
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(UserProfileDto))]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "userManagement/{id:Guid}/account/profile")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "{id:Guid}/account/profile")]
                                          HttpRequestMessage httpRequest,
                                          CancellationToken cancellationToken,
                                          Guid id)
     {
-        return await GetUserProfileAsync(httpRequest, id, cancellationToken);
+        return await GetUserProfileAsync(id, cancellationToken);
     }
 
-    public async Task<IActionResult> GetUserProfileAsync(HttpRequestMessage httpRequest, Guid userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetUserProfileAsync(Guid userId, CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
 
-      if (userId == Guid.Empty)
+      if (userId.Equals(Guid.Empty))
       {
         return new BadRequestObjectResult($"{nameof(userId)} is not a valid {nameof(Guid)}..");
       }
@@ -52,6 +52,10 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
       if (result == null)
       {
         return new NotFoundObjectResult($"Profile of user with id {userId} could not be found..");
+      }
+      if (!result.IsOperationSuccessful)
+      {
+        return new BadRequestObjectResult(result);
       }
 
       return new OkObjectResult(result);

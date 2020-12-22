@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Fixit.Core.DataContracts.Users.Profile;
-using Fixit.User.Management.Lib.Models.Documents;
+using Fixit.User.Management.Lib.Models;
 
 namespace Fixit.User.Management.Lib.Mappers
 {

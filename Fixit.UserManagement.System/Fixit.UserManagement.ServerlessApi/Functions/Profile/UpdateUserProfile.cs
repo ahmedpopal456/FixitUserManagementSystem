@@ -34,7 +34,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
     [OpenApiParameter("id", In = ParameterLocation.Path, Required = true, Type = typeof(Guid))]
     [OpenApiRequestBody("application/json", typeof(UserProfileUpdateRequestDto), Required = true)]
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(UserProfileInformationDto))]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "userManagement/{id:Guid}/account/profile")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "{id:Guid}/account/profile")]
                                          HttpRequestMessage httpRequest,
                                          CancellationToken cancellationToken,
                                          Guid id)
@@ -46,7 +46,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
     {
       cancellationToken.ThrowIfCancellationRequested();
 
-      if (userId == Guid.Empty)
+      if (userId.Equals(Guid.Empty))
       {
         return new BadRequestObjectResult($"{nameof(userId)} is not a valid {nameof(Guid)}..");
       }
@@ -56,19 +56,14 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
         return new BadRequestObjectResult($"Either {nameof(userProfileUpdateRequestDto)} is null or has one or more invalid fields...");
       }
 
-      UserProfileInformationDto result = null;
-      try
+      var result = await _userMediator.UpdateUserProfileAsync(userId, userProfileUpdateRequestDto, cancellationToken);
+      if (result == null)
       {
-        result = await _userMediator.UpdateUserProfileAsync(userId, userProfileUpdateRequestDto, cancellationToken);
-
-        if (result == null)
-        {
-          return new NotFoundObjectResult($"Profile of user with id {userId} could not be found..");
-        }
+        return new NotFoundObjectResult($"Profile of user with id {userId} could not be found..");
       }
-      catch(Exception exception)
+      if (!result.IsOperationSuccessful)
       {
-        return new BadRequestObjectResult(exception);
+        return new BadRequestObjectResult(result);
       }
 
       return new OkObjectResult(result);
