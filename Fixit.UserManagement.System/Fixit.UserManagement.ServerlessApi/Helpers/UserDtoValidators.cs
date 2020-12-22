@@ -20,14 +20,14 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
     #endregion
 
     #region UserProfileConfiguration
-    public static bool IsValidUserProfileUpdateRequest(HttpContent httpContent, out UpdateUserProfileRequestDto userProfileInformationDto)
+    public static bool IsValidUserProfileUpdateRequest(HttpContent httpContent, out UserProfileUpdateRequestDto userProfileUpdateRequestDto)
     {
       bool isValid = false;
-      userProfileInformationDto = null;
+      userProfileUpdateRequestDto = null;
 
       try
       {
-        var userProfileInformationDeserialized = JsonConvert.DeserializeObject<UpdateUserProfileRequestDto>(httpContent.ReadAsStringAsync().Result);
+        var userProfileInformationDeserialized = JsonConvert.DeserializeObject<UserProfileUpdateRequestDto>(httpContent.ReadAsStringAsync().Result);
         if (userProfileInformationDeserialized != null)
         {
 
@@ -36,7 +36,33 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
 
           if (isValid)
           {
-            userProfileInformationDto = userProfileInformationDeserialized;
+            userProfileUpdateRequestDto = userProfileInformationDeserialized;
+          }
+        }
+
+      }
+      catch
+      {
+        // Fall through 
+      }
+      return isValid;
+    }
+
+    public static bool IsValidUserProfilePictureUpdateRequest(HttpContent httpContent, out UserProfilePictureUpdateRequestDto userProfilePictureUpdateRequestDto)
+    {
+      bool isValid = false;
+      userProfilePictureUpdateRequestDto = null;
+
+      try
+      {
+        var userProfilePictureDeserialized = JsonConvert.DeserializeObject<UserProfilePictureUpdateRequestDto>(httpContent.ReadAsStringAsync().Result);
+        if (userProfilePictureDeserialized != null)
+        {
+          isValid = !string.IsNullOrWhiteSpace(userProfilePictureDeserialized.ProfilePictureUrl);
+
+          if (isValid)
+          {
+            userProfilePictureUpdateRequestDto = userProfilePictureDeserialized;
           }
         }
 

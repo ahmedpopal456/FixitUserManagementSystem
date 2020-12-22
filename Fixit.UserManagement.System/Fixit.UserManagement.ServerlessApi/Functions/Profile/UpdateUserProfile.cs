@@ -32,7 +32,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
     [FunctionName("UpdateUserProfile")]
     [OpenApiOperation("put", "UserProfile")]
     [OpenApiParameter("id", In = ParameterLocation.Path, Required = true, Type = typeof(Guid))]
-    [OpenApiRequestBody("application/json", typeof(UpdateUserProfileRequestDto), Required = true)]
+    [OpenApiRequestBody("application/json", typeof(UserProfileUpdateRequestDto), Required = true)]
     [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(UserProfileInformationDto))]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "userManagement/{id:Guid}/account/profile")]
                                          HttpRequestMessage httpRequest,
@@ -51,15 +51,15 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
         return new BadRequestObjectResult($"{nameof(userId)} is not a valid {nameof(Guid)}..");
       }
 
-      if (!UserDtoValidators.IsValidUserProfileUpdateRequest(httpRequest.Content, out UpdateUserProfileRequestDto userProfileInformationDto))
+      if (!UserDtoValidators.IsValidUserProfileUpdateRequest(httpRequest.Content, out UserProfileUpdateRequestDto userProfileUpdateRequestDto))
       {
-        return new BadRequestObjectResult($"Either {nameof(userProfileInformationDto)} is null or has one or more invalid fields...");
+        return new BadRequestObjectResult($"Either {nameof(userProfileUpdateRequestDto)} is null or has one or more invalid fields...");
       }
 
       UserProfileInformationDto result = null;
       try
       {
-        result = await _userMediator.UpdateUserProfileAsync(userId, userProfileInformationDto, cancellationToken);
+        result = await _userMediator.UpdateUserProfileAsync(userId, userProfileUpdateRequestDto, cancellationToken);
 
         if (result == null)
         {

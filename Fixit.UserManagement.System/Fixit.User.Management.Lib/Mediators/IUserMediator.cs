@@ -10,6 +10,8 @@ namespace Fixit.User.Management.Lib.Mediators
   {
     Task<UserProfileDto> GetUserProfileAsync(Guid userId, CancellationToken cancellationToken);
 
-    Task<UserProfileInformationDto> UpdateUserProfileAsync(Guid userId, UpdateUserProfileRequestDto userProfileInformationDto, CancellationToken cancellationToken);
+    Task<UserProfileInformationDto> UpdateUserProfileAsync(Guid userId, UserProfileUpdateRequestDto userProfileUpdateRequestDto, CancellationToken cancellationToken);
+
+    Task<UserProfilePictureDto> UpdateUserProfilePictureAsync(Guid userId, UserProfilePictureUpdateRequestDto userProfilePictureUpdateRequestDto, CancellationToken cancellationToken);
   }
 }

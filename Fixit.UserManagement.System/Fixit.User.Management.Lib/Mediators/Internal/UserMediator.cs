@@ -23,8 +23,8 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
                         IDatabaseMediator databaseMediator,
                         IConfiguration configurationProvider)
     {
-      var databaseName = configurationProvider["FIXIT-UM-USERDB"];
-      var databaseUserTableName = configurationProvider["FIXIT-UM-USERTABLE"];
+      var databaseName = configurationProvider["FIXIT-UM-DB-NAME"];
+      var databaseUserTableName = configurationProvider["FIXIT-UM-DB-USERTABLE"];
       _configuration = configurationProvider;
 
       if (string.IsNullOrWhiteSpace(databaseName))
@@ -68,37 +68,75 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       return result;
     }
 
-    public async Task<UserProfileInformationDto> UpdateUserProfileAsync(Guid userId, UpdateUserProfileRequestDto userProfileInformationDto, CancellationToken cancellationToken)
+    public async Task<UserProfileInformationDto> UpdateUserProfileAsync(Guid userId, UserProfileUpdateRequestDto userProfileUpdateRequestDto, CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
 
-      UserProfileInformationDto result = null;
+      UserProfileInformationDto result = default(UserProfileInformationDto);
 
       DocumentCollectionDto<UserDocument> documentCollection = (await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, i => i.id == userId.ToString())).DocumentCollection;
       if (documentCollection.OperationException != null)
       {
         throw documentCollection.OperationException;
       }
-      if (!documentCollection.IsOperationSuccessful || documentCollection.Results.Count == 0 )
+      if (documentCollection.IsOperationSuccessful && documentCollection.Results.Count != default(int) )
       {
-        return null;
+        return result;
       }
 
       UserDocument userDocument = documentCollection.Results[0];
-      if (!string.IsNullOrWhiteSpace(userProfileInformationDto.FirstName))
+      if (!string.IsNullOrWhiteSpace(userProfileUpdateRequestDto.FirstName))
       {
-        userDocument.FirstName = userProfileInformationDto.FirstName;
+        userDocument.FirstName = userProfileUpdateRequestDto.FirstName;
       }
-      if (!string.IsNullOrWhiteSpace(userProfileInformationDto.LastName))
+      if (!string.IsNullOrWhiteSpace(userProfileUpdateRequestDto.LastName))
       {
-        userDocument.LastName = userProfileInformationDto.LastName;
+        userDocument.LastName = userProfileUpdateRequestDto.LastName;
       }
-      if (userProfileInformationDto.Address != null)
+      if (userProfileUpdateRequestDto.Address != null)
       {
-        userDocument.Address = userProfileInformationDto.Address;
+        userDocument.Address = userProfileUpdateRequestDto.Address;
       }
 
-      string partitionKey = userDocument.Role == UserRole.Client ? _configuration["FIXIT-UM-CLIENTPK"] : _configuration["FIXIT-UM-CRAFTSMANPK"];
+      string partitionKey = userDocument.Role == UserRole.Client ? _configuration["FIXIT-UM-DB-CLIENTPK"] : _configuration["FIXIT-UM-DB-CRAFTSMANPK"];
+
+      OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, partitionKey, cancellationToken);
+      if (status.OperationException != null)
+      {
+        throw status.OperationException;
+      }
+      if (!status.IsOperationSuccessful)
+      {
+        return result;
+      }
+
+      result = _mapper.Map<UserDocument, UserProfileInformationDto>(userDocument);
+      return result;
+    }
+
+    public async Task<UserProfilePictureDto> UpdateUserProfilePictureAsync(Guid userId, UserProfilePictureUpdateRequestDto userProfilePictureUpdateRequestDto, CancellationToken cancellationToken)
+    {
+      cancellationToken.ThrowIfCancellationRequested();
+
+      UserProfilePictureDto result = default(UserProfilePictureDto);
+
+      DocumentCollectionDto<UserDocument> documentCollection = (await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, i => i.id == userId.ToString())).DocumentCollection;
+      if (documentCollection.OperationException != null)
+      {
+        throw documentCollection.OperationException;
+      }
+      if (!documentCollection.IsOperationSuccessful || documentCollection.Results.Count == default(int))
+      {
+        return result;
+      }
+
+      UserDocument userDocument = documentCollection.Results[0];
+      if (!string.IsNullOrWhiteSpace(userProfilePictureUpdateRequestDto.ProfilePictureUrl))
+      {
+        userDocument.ProfilePictureUrl = userProfilePictureUpdateRequestDto.ProfilePictureUrl;
+      }
+
+      string partitionKey = userDocument.Role == UserRole.Client ? _configuration["FIXIT-UM-DB-CLIENTPK"] : _configuration["FIXIT-UM-DB-CRAFTSMANPK"];
 
       OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, partitionKey, cancellationToken);
       if (status.OperationException != null)
@@ -110,7 +148,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         return null;
       }
 
-      result = _mapper.Map<UserDocument, UserProfileInformationDto>(userDocument);
+      result = _mapper.Map<UserDocument, UserProfilePictureDto>(userDocument);
       return result;
     }
     #endregion

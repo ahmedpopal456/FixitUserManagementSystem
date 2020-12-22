@@ -6,7 +6,7 @@
   <ItemGroup>
     <PackageReference Include="Aliencube.AzureFunctions.Extensions.OpenApi" Version="3.1.1" />
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.0-118-11" />
+    <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.0-alpha62-15" />
     <PackageReference Include="Fixit.Core.Security" Version="1.0.1-beta" />
     <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
     <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" />
