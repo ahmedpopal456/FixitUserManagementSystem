@@ -7,8 +7,8 @@ using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.Core.Database.Mediators;
 using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
+using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.User.Management.Lib.Models.Documents;
-using Fixit.User.Management.Lib.Models.Profile;
 using Microsoft.Extensions.Configuration;
 
 namespace Fixit.User.Management.Lib.Mediators.Internal

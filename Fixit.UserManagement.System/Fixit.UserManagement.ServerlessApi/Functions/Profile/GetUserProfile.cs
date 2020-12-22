@@ -11,7 +11,7 @@ using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Threading;
 using System.Net.Http;
-using Fixit.User.Management.Lib.Models.Profile;
+using Fixit.Core.DataContracts.Users.Profile;
 
 namespace Fixit.User.Management.ServerlessApi.Functions.Profile
 {

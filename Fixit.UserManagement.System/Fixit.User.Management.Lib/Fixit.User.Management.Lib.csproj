@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -14,8 +14,8 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="Fixit.Core.Database" Version="1.0.11-beta" />
-    <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.0-alpha62-15" />
+    <PackageReference Include="Fixit.Core.Database" Version="1.0.13-beta" />
+    <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.0-alpha62-16" />
   </ItemGroup>
 
 </Project>

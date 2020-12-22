@@ -9,11 +9,11 @@ using AutoMapper;
 using Aliencube.AzureFunctions.Extensions.OpenApi.Core.Attributes;
 using System.Net;
 using Microsoft.OpenApi.Models;
-using Fixit.User.Management.Lib.Models.Profile;
 using System.Net.Http;
 using System.Threading;
 using Fixit.User.Management.ServerlessApi.Helpers;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
+using Fixit.Core.DataContracts.Users.Profile;
 
 namespace Fixit.User.Management.ServerlessApi.Functions.Profile
 {

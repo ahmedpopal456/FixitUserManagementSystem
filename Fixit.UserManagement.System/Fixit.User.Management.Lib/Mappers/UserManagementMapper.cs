@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using AutoMapper;
-using Fixit.User.Management.Lib.Models;
+﻿using AutoMapper;
+using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.User.Management.Lib.Models.Documents;
-using Fixit.User.Management.Lib.Models.Profile;
 
 namespace Fixit.User.Management.Lib.Mappers
 {
