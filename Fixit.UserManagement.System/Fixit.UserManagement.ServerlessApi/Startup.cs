@@ -30,7 +30,13 @@ namespace Fixit.User.Management.ServerlessApi
 
       builder.Services.AddSingleton<IMapper>(mapperConfig.CreateMapper());
       builder.Services.AddSingleton<IDatabaseMediator>(factory.CreateCosmosClient());
-      builder.Services.AddTransient<IUserMediator, UserMediator>();
+      builder.Services.AddSingleton<IUserMediator, UserMediator>(provider =>
+      {
+        var mapper = provider.GetService<IMapper>();
+        var databaseMediator = provider.GetService<IDatabaseMediator>();
+        var configuration = provider.GetService<IConfiguration>();
+        return new UserMediator(mapper, databaseMediator, configuration);
+      });
     }
   }
 }

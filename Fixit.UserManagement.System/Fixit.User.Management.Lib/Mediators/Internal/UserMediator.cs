@@ -18,7 +18,6 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
   {
     private readonly IMapper _mapper;
     private readonly IDatabaseTableEntityMediator _databaseUserTable;
-    private readonly IConfiguration _configuration;
 
     public UserMediator(IMapper mapper,
                         IDatabaseMediator databaseMediator,
@@ -26,7 +25,6 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
     {
       var databaseName = configurationProvider["FIXIT-UM-DB-NAME"];
       var databaseUserTableName = configurationProvider["FIXIT-UM-DB-USERTABLE"];
-      _configuration = configurationProvider;
 
       if (string.IsNullOrWhiteSpace(databaseName))
       {
@@ -36,6 +34,31 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       if (string.IsNullOrWhiteSpace(databaseUserTableName))
       {
         throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Table as {{FIXIT-UM-USERTABLE}} ");
+      }
+
+      if (databaseMediator == null)
+      {
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
+      }
+
+      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(mapper)}... null argument was provided");
+      _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(databaseUserTableName);
+    }
+
+    public UserMediator(IMapper mapper,
+                        IDatabaseMediator databaseMediator,
+                        string databaseName,
+                        string databaseUserTableName)
+    {
+
+      if (string.IsNullOrWhiteSpace(databaseName))
+      {
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseName)}... null argument was provided");
+      }
+
+      if (string.IsNullOrWhiteSpace(databaseUserTableName))
+      {
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseUserTableName)}... null argument was provided");
       }
 
       if (databaseMediator == null)
@@ -59,10 +82,11 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
+        result = new UserProfileDto();
         if (userDocumentCollection.IsOperationSuccessful)
         {
-          result.IsOperationSuccessful = true;
           result = _mapper.Map<UserDocument, UserProfileDto>(userDocumentCollection.Results.SingleOrDefault());
+          result.IsOperationSuccessful = true;
         }
         if (userDocumentCollection.OperationException != null)
         {
@@ -80,6 +104,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
+        result = new UserProfileInformationDto();
         if (userDocumentCollection.IsOperationSuccessful)
         {
           UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
@@ -90,8 +115,8 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
           if (status.IsOperationSuccessful)
           {
-            result.IsOperationSuccessful = true;
             result = _mapper.Map<UserDocument, UserProfileInformationDto>(userDocument);
+            result.IsOperationSuccessful = true;
           }
           if (status.OperationException != null)
           {
@@ -114,6 +139,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
+        result = new UserProfilePictureDto();
         if (userDocumentCollection.IsOperationSuccessful)
         {
           UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
@@ -122,8 +148,8 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
           if (status.IsOperationSuccessful)
           {
-            result.IsOperationSuccessful = true;
             result = _mapper.Map<UserDocument, UserProfilePictureDto>(userDocument);
+            result.IsOperationSuccessful = true;
           }
           if (status.OperationException != null)
           {

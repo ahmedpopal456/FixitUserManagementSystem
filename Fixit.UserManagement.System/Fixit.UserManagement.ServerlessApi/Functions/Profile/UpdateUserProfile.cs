@@ -48,7 +48,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
 
       if (userId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(userId)} is not a valid {nameof(Guid)}..");
+        return new BadRequestObjectResult($"{nameof(userId)} is not valid..");
       }
 
       if (!UserDtoValidators.IsValidUserProfileUpdateRequest(httpRequest.Content, out UserProfileUpdateRequestDto userProfileUpdateRequestDto))

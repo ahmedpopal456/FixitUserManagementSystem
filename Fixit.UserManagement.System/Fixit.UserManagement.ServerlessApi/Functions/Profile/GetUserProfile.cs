@@ -45,7 +45,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
 
       if (userId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(userId)} is not a valid {nameof(Guid)}..");
+        return new BadRequestObjectResult($"{nameof(userId)} is not valid..");
       }
 
       var result = await _userMediator.GetUserProfileAsync(userId, cancellationToken);
