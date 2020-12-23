@@ -49,13 +49,13 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Profile
       }
 
       var result = await _userMediator.GetUserProfileAsync(userId, cancellationToken);
-      if (result == null)
-      {
-        return new NotFoundObjectResult($"Profile of user with id {userId} could not be found..");
-      }
       if (!result.IsOperationSuccessful)
       {
-        return new BadRequestObjectResult(result);
+        if (result.OperationException != null)
+        {
+          return new BadRequestObjectResult(result);
+        }
+        return new NotFoundObjectResult($"Profile of user with id {userId} could not be found..");
       }
 
       return new OkObjectResult(result);

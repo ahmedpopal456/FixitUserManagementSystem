@@ -26,7 +26,7 @@ namespace Fixit.User.Management.ServerlessApi
         mc.AddProfile(new UserManagementMapper());
       });
 
-      DatabaseFactory factory = new DatabaseFactory(_configuration["FIXIT-CDB-EP"], _configuration["FIXIT-CDB-CS"]);
+      DatabaseFactory factory = new DatabaseFactory(_configuration["FIXIT-UM-DB-EP"], _configuration["FIXIT-UM-DB-KEY"]);
 
       builder.Services.AddSingleton<IMapper>(mapperConfig.CreateMapper());
       builder.Services.AddSingleton<IDatabaseMediator>(factory.CreateCosmosClient());

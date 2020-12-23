@@ -82,11 +82,16 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
-        result = new UserProfileDto();
-        if (userDocumentCollection.IsOperationSuccessful)
+        result = (UserProfileDto)(OperationStatus)userDocumentCollection;
+        if (result.IsOperationSuccessful)
         {
-          result = _mapper.Map<UserDocument, UserProfileDto>(userDocumentCollection.Results.SingleOrDefault());
-          result.IsOperationSuccessful = true;
+          result.IsOperationSuccessful = false;
+          UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
+          if (userDocument != null)
+          {
+            result = _mapper.Map<UserDocument, UserProfileDto>(userDocument);
+            result.IsOperationSuccessful = true;
+          }
         }
         if (userDocumentCollection.OperationException != null)
         {
@@ -104,28 +109,25 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
-        result = new UserProfileInformationDto();
-        if (userDocumentCollection.IsOperationSuccessful)
+        result = (UserProfileInformationDto)(OperationStatus)userDocumentCollection;
+        if (result.IsOperationSuccessful)
         {
+          result.IsOperationSuccessful = false;
           UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
-          userDocument.FirstName = userProfileUpdateRequestDto.FirstName;
-          userDocument.LastName = userProfileUpdateRequestDto.LastName;
-          userDocument.Address = userProfileUpdateRequestDto.Address;
+          if (userDocument != null)
+          {
+            userDocument.FirstName = userProfileUpdateRequestDto.FirstName;
+            userDocument.LastName = userProfileUpdateRequestDto.LastName;
+            userDocument.Address = userProfileUpdateRequestDto.Address;
+            userDocument.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-          OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
-          if (status.IsOperationSuccessful)
-          {
-            result = _mapper.Map<UserDocument, UserProfileInformationDto>(userDocument);
-            result.IsOperationSuccessful = true;
+            result = (UserProfileInformationDto) await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
+            if (result.IsOperationSuccessful)
+            {
+              result = _mapper.Map<UserDocument, UserProfileInformationDto>(userDocument);
+              result.IsOperationSuccessful = true;
+            }
           }
-          if (status.OperationException != null)
-          {
-            result.OperationException = status.OperationException;
-          }
-        }
-        if (userDocumentCollection.OperationException != null)
-        {
-          result.OperationException = userDocumentCollection.OperationException;
         }
       }
       return result;
@@ -139,26 +141,23 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
-        result = new UserProfilePictureDto();
-        if (userDocumentCollection.IsOperationSuccessful)
+        result = (UserProfilePictureDto)(OperationStatus) userDocumentCollection;
+        if (result.IsOperationSuccessful)
         {
+          result.IsOperationSuccessful = false;
           UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
-          userDocument.ProfilePictureUrl = userProfilePictureUpdateRequestDto.ProfilePictureUrl;
+          if (userDocument != null)
+          {
+            userDocument.ProfilePictureUrl = userProfilePictureUpdateRequestDto.ProfilePictureUrl;
+            userDocument.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-          OperationStatus status = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
-          if (status.IsOperationSuccessful)
-          {
-            result = _mapper.Map<UserDocument, UserProfilePictureDto>(userDocument);
-            result.IsOperationSuccessful = true;
+            result = (UserProfilePictureDto) await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
+            if (result.IsOperationSuccessful)
+            {
+              result = _mapper.Map<UserDocument, UserProfilePictureDto>(userDocument);
+              result.IsOperationSuccessful = true;
+            }
           }
-          if (status.OperationException != null)
-          {
-            result.OperationException = status.OperationException;
-          }
-        }
-        if (userDocumentCollection.OperationException != null)
-        {
-          result.OperationException = userDocumentCollection.OperationException;
         }
       }
       return result;
