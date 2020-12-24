@@ -4,9 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Fixit.Core.Database.DataContracts;
-using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.Core.Database.Mediators;
-using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
 using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.User.Management.Lib.Models;
@@ -92,10 +90,6 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
             result = _mapper.Map<UserDocument, UserProfileDto>(userDocument);
             result.IsOperationSuccessful = true;
           }
-        }
-        if (userDocumentCollection.OperationException != null)
-        {
-          result.OperationException = userDocumentCollection.OperationException;
         }
       }
       return result;
