@@ -161,7 +161,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
             result.OperationException = operationStatus.OperationException;
             result.OperationMessage = operationStatus.OperationMessage;
 
-            if (result.IsOperationSuccessful)
+            if (operationStatus.IsOperationSuccessful)
             {
               result = _mapper.Map<UserDocument, UserProfilePictureDto>(userDocument);
               result.IsOperationSuccessful = true;
