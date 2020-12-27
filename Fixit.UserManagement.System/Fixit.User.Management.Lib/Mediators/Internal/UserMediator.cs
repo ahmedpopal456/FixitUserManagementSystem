@@ -46,7 +46,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
     public UserMediator(IMapper mapper,
                         IDatabaseMediator databaseMediator,
                         string databaseName,
-                        string databaseUserTableName)
+                        string tableName)
     {
 
       if (string.IsNullOrWhiteSpace(databaseName))
@@ -54,9 +54,9 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseName)}... null argument was provided");
       }
 
-      if (string.IsNullOrWhiteSpace(databaseUserTableName))
+      if (string.IsNullOrWhiteSpace(tableName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseUserTableName)}... null argument was provided");
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(tableName)}... null argument was provided");
       }
 
       if (databaseMediator == null)
@@ -65,7 +65,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       }
 
       _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(mapper)}... null argument was provided");
-      _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(databaseUserTableName);
+      _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(tableName);
     }
 
     #region UserAccountConfiguration
@@ -116,9 +116,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
           if (userDocument != null)
           {
-            userDocument.FirstName = userProfileUpdateRequestDto.FirstName;
-            userDocument.LastName = userProfileUpdateRequestDto.LastName;
-            userDocument.Address = userProfileUpdateRequestDto.Address;
+            userDocument = _mapper.Map<UserProfileUpdateRequestDto, UserDocument>(userProfileUpdateRequestDto, userDocument);
             userDocument.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
             var operationStatus = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
@@ -154,7 +152,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
           if (userDocument != null)
           {
-            userDocument.ProfilePictureUrl = userProfilePictureUpdateRequestDto.ProfilePictureUrl;
+            userDocument = _mapper.Map<UserProfilePictureUpdateRequestDto, UserDocument>(userProfilePictureUpdateRequestDto, userDocument);
             userDocument.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
             var operationStatus = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.Role.ToString(), cancellationToken);
