@@ -14,7 +14,6 @@
   </BasePolicy>
 
   <BuildingBlocks>
-
     <ClaimsSchema>
 
       <ClaimType Id="address1">
@@ -55,11 +54,9 @@
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
-
     </ClaimsSchema>
 
     <ContentDefinitions>
-
       <ContentDefinition Id="api.signin">
         <LoadUri>~/tenant/templates/AzureBlue/unified.cshtml</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
@@ -68,13 +65,10 @@
           <Item Key="DisplayName">Signin</Item>
         </Metadata>
       </ContentDefinition>
-    
     </ContentDefinitions>
-
   </BuildingBlocks>
 
   <ClaimsProviders>
-
     <ClaimsProvider>
       <DisplayName>Facebook</DisplayName>
       <TechnicalProfiles>
@@ -115,11 +109,9 @@
         </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
-
   </ClaimsProviders>
 
   <UserJourneys>
-
     <UserJourney Id="SignIn">
       <OrchestrationSteps>
         <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signin">
@@ -140,7 +132,6 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
-
   </UserJourneys>
 
 </TrustFrameworkPolicy>
