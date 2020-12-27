@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="Fixit.Core.Database" Version="1.0.15" />
-    <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.0-alpha62-19" />
+    <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.30-beta" />
   </ItemGroup>
 
 </Project>
