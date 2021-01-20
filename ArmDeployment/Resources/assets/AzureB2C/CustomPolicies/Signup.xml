@@ -4,9 +4,9 @@
   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
   xmlns="http://schemas.microsoft.com/online/cpim/schemas/2013/06"
   PolicySchemaVersion="0.3.0.0"
-  TenantId={{TenantId}}
-  PolicyId={{SignInPolicyId}}
-  PublicPolicyUri={{SignInPublicPolicyUri}}>
+  TenantId="fixitb2ctest.onmicrosoft.com"
+  PolicyId="B2C_1A_signup"
+  PublicPolicyUri="http://fixitb2ctest.onmicrosoft.com/B2C_1A_signup">
 
   <BasePolicy>
     <TenantId>fixitb2ctest.onmicrosoft.com</TenantId>
@@ -19,7 +19,6 @@
       <DisplayName>PolicyProfile</DisplayName>
       <Protocol Name="OpenIdConnect" />
       <OutputClaims>
-        <OutputClaim ClaimTypeReferenceId="displayName" />
         <OutputClaim ClaimTypeReferenceId="givenName" />
         <OutputClaim ClaimTypeReferenceId="surname" />
         <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
