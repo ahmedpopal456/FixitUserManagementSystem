@@ -63,7 +63,26 @@
           <Enumeration Text="Craftsman" Value="1" SelectByDefault="false" />
         </Restriction>
       </ClaimType>
+
+      <ClaimType Id="userCreateRequestBody">
+        <DisplayName>Request body for create user operation</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
     </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GenerateCreateUserRequestBody" TransformationMethod="GenerateJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="givenName" TransformationClaimType="firstName" />
+          <InputClaim ClaimTypeReferenceId="surname" TransformationClaimType="lastName" />
+          <InputClaim ClaimTypeReferenceId="userPrincipalName" TransformationClaimType="userPrincipalName" />
+          <InputClaim ClaimTypeReferenceId="role" TransformationClaimType="role" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userCreateRequestBody" TransformationClaimType="outputClaim"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations> 
 
     <ContentDefinitions>
       <ContentDefinition Id="api.signin">
@@ -162,7 +181,7 @@
           <DisplayName>Create new user in CosmosDB upon sign up</DisplayName>
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
-            <Item Key="ServiceUrl">http://eb7b5d3f3eaf.ngrok.io</Item>
+            <Item Key="ServiceUrl">http://11b3bf1acfb9.ngrok.io/user</Item>
             <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
             <Item Key="ClaimUsedForRequestPayload">userCreateRequestBody</Item>
@@ -194,20 +213,6 @@
           </ValidationTechnicalProfiles>
         </TechnicalProfile>
       </TechnicalProfiles>
-
-      <ClaimsTransformations>
-          <ClaimsTransformation Id="GenerateCreateUserRequestBody" TransformationMethod="GenerateJson">
-            <InputClaims>
-              <InputClaim ClaimTypeReferenceId="givenName" TransformationClaimType="firstName" />
-              <InputClaim ClaimTypeReferenceId="surname" TransformationClaimType="lastName" />
-              <InputClaim ClaimTypeReferenceId="userPrincipalName" TransformationClaimType="userPrincipalName" />
-              <InputClaim ClaimTypeReferenceId="role" TransformationClaimType="role" />
-            </InputClaims>
-            <OutputClaims>
-              <OutputClaim ClaimTypeReferenceId="userCreateRequestBody" TransformationClaimType="outputClaim"/>
-            </OutputClaims>
-          </ClaimsTransformation>
-        </ClaimsTransformations> 
     </ClaimsProvider>
   </ClaimsProviders>
 
@@ -246,13 +251,17 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <!-- <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" /> -->
-        <OrchestrationStep Order="3" Type="InvokeSubJourney">
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-API-SignUp" TechnicalProfileReferenceId="REST-API-SignUp" />
+          </ClaimsExchanges>
+        </OrchestrationStep> 
+        <OrchestrationStep Order="4" Type="InvokeSubJourney">
           <JourneyList>
             <Candidate SubJourneyReferenceId="SignInAfterSignUp" />
           </JourneyList>
         </OrchestrationStep>
-        <OrchestrationStep Order="4" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
