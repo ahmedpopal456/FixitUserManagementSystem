@@ -64,6 +64,11 @@
         </Restriction>
       </ClaimType>
 
+      <!-- Returned from the REST API to be used in the token that is issued -->
+      <ClaimType Id="userId">
+        <DataType>long</DataType>
+      </ClaimType>
+
       <ClaimType Id="userCreateRequestBody">
         <DisplayName>Request body for create user operation</DisplayName>
         <DataType>string</DataType>
@@ -182,36 +187,21 @@
           <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
           <Metadata>
             <Item Key="ServiceUrl">http://11b3bf1acfb9.ngrok.io/user</Item>
-            <Item Key="AuthenticationType">None</Item>
             <Item Key="SendClaimsIn">Body</Item>
-            <Item Key="ClaimUsedForRequestPayload">userCreateRequestBody</Item>
+            <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
+            <Item Key="AuthenticationType">None</Item>
+            <!-- REMOVE the following line in production environments -->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
           </Metadata>
-          <InputClaimsTransformations>
-            <InputClaimsTransformation ReferenceId="GenerateCreateUserRequestBody" />
-          </InputClaimsTransformations>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="userCreateRequestBody" />
+            <InputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="firstname" />
+            <InputClaim ClaimTypeReferenceId="surname" PartnerClaimType="lastname" />
+            <InputClaim ClaimTypeReferenceId="userPrincipalName" />
+            <InputClaim ClaimTypeReferenceId="role" />
           </InputClaims>
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="givenName" />
-            <OutputClaim ClaimTypeReferenceId="surname" />
-            <OutputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="sub"/>
-            <OutputClaim ClaimTypeReferenceId="tenantId" AlwaysUseDefaultValue="true" DefaultValue="{Policy:TenantObjectId}" />
-          </OutputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
 
-        <!-- Add validation technical profile to LocalAccountSignUpWithLogonEmail technical profile -->
-        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
-          <OutputClaims>
-            <OutputClaim ClaimTypeReferenceId="givenName" />
-            <OutputClaim ClaimTypeReferenceId="surname" />
-            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
-          </OutputClaims>
-          <ValidationTechnicalProfiles>
-            <ValidationTechnicalProfile ReferenceId="REST-API-SignUp" />
-          </ValidationTechnicalProfiles>
-        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
