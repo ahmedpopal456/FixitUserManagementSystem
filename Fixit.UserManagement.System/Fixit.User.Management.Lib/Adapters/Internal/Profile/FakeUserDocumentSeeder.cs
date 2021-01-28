@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Fixit.Core.DataContracts;
 using Fixit.Core.DataContracts.Users.Address;
+using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.User.Management.Lib.Models;
 
@@ -15,6 +16,8 @@ namespace Fixit.User.Management.Lib.Adapters.Internal.Profile
         ProfilePictureUrl = "something.something/something.png",
         FirstName = "John",
         LastName = "Doe",
+        UserPrincipalName = "johnDoe@test.com",
+        Role = UserRole.Client,
         Address = new AddressDto()
         {
           Address = "123 Something",

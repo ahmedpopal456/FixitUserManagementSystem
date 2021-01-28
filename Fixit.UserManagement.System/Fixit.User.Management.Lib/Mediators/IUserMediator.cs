@@ -3,6 +3,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
 using Fixit.Core.DataContracts.Users.Profile;
+using Fixit.Core.DataContracts;
+using Fixit.Core.DataContracts.Users.Account;
+using Fixit.Core.DataContracts.Users.Operations.Account;
 
 namespace Fixit.User.Management.Lib.Mediators
 {
@@ -33,5 +36,30 @@ namespace Fixit.User.Management.Lib.Mediators
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<UserProfilePictureDto> UpdateUserProfilePictureAsync(Guid userId, UserProfilePictureUpdateRequestDto userProfilePictureUpdateRequestDto, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userAccountCreateRequestDto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<UserAccountRoleResponseDto> CreateUserAsync(UserAccountCreateRequestDto userAccountCreateRequestDto, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="userAccountStateDto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<UserAccountStateDto> UpdateUserStatusAsync(Guid userId, UserAccountStateDto userAccountStateDto, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<OperationStatus> DeleteUserAsync(Guid userId, CancellationToken cancellationToken);
   }
 }

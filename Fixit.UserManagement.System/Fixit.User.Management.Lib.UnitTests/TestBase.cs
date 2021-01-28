@@ -7,6 +7,7 @@ using AutoMapper;
 using Fixit.Core.Database.Mediators;
 using Microsoft.Extensions.Configuration;
 using Fixit.User.Management.Lib.Mappers;
+using Fixit.Core.Connectors.Mediators;
 
 namespace Fixit.User.Management.Lib.UnitTests
 {
@@ -22,6 +23,9 @@ namespace Fixit.User.Management.Lib.UnitTests
     protected Mock<IDatabaseMediator> _databaseMediator;
     protected Mock<IDatabaseTableMediator> _databaseTableMediator;
     protected Mock<IDatabaseTableEntityMediator> _databaseTableEntityMediator;
+
+    //Connectors Mocks
+    protected Mock<IMicrosoftGraphMediator> _msGraphMediator;
 
     // Mapper
     protected MapperConfiguration _mapperConfiguration = new MapperConfiguration(config =>
