@@ -198,6 +198,7 @@
             <InputClaim ClaimTypeReferenceId="surname" PartnerClaimType="lastname" />
             <InputClaim ClaimTypeReferenceId="userPrincipalName" />
             <InputClaim ClaimTypeReferenceId="role" />
+            <InputClaim ClaimTypeReferenceId="objectId" />
           </InputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
