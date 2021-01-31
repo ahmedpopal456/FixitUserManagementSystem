@@ -1,0 +1,28 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.background {
+    background-image: url("https://storageaccountleung9918.blob.core.windows.net/jleung-blob/background-left.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+
+#FacebookExchange {
+    background-image: url(facebook-colored.svg);
+}
+
+    #FacebookExchange:hover {
+        background-image: url(facebook-white.svg);
+    }
+
+.buttons #cancel:before {
+    content: url(../../assets/images/left-arrow.svg);
+}

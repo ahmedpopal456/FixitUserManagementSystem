@@ -112,6 +112,17 @@
             <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
           </LocalizedResourcesReferences>
       </ContentDefinition>
+      <ContentDefinition Id="api.localaccountpasswordreset">
+        <LoadUri>https://storageaccountleung9918.blob.core.windows.net/jleung-blob/passwordReset.html</LoadUri>
+        <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+        <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+        <Metadata>
+          <Item Key="DisplayName">Password Reset</Item>
+        </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountpasswordreset.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
     </ContentDefinitions>
 
     <Localization Enabled="true">
@@ -133,6 +144,17 @@
         </LocalizedStrings>
       </LocalizedResources>
     </Localization> 
+    
+    <Localization Enabled="true">
+      <SupportedLanguages DefaultLanguage="en">
+        <SupportedLanguage>en</SupportedLanguage>
+      </SupportedLanguages>
+      <LocalizedResources Id="api.localaccountpasswordreset.en">
+      	<LocalizedStrings>
+      	  <LocalizedString ElementType="UxElement" StringId="button_continue">Confirm</LocalizedString>
+      	</LocalizedStrings>
+      </LocalizedResources>
+    </Localization>
   </BuildingBlocks>
 
   <ClaimsProviders>
