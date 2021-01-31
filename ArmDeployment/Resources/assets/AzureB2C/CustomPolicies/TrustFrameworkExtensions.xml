@@ -143,12 +143,6 @@
           <LocalizedString ElementType="UxElement" StringId="button_continue">Next</LocalizedString>
         </LocalizedStrings>
       </LocalizedResources>
-    </Localization> 
-    
-    <Localization Enabled="true">
-      <SupportedLanguages DefaultLanguage="en">
-        <SupportedLanguage>en</SupportedLanguage>
-      </SupportedLanguages>
       <LocalizedResources Id="api.localaccountpasswordreset.en">
       	<LocalizedStrings>
       	  <LocalizedString ElementType="UxElement" StringId="button_continue">Confirm</LocalizedString>
