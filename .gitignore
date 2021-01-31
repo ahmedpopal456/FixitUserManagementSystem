@@ -345,11 +345,3 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
-
-# DS_Store 
-.DS_Store
-ArmDeployment/.DS_Store
-ArmDeployment/Resources/.DS_Store
-ArmDeployment/Resources/assets/.DS_Store
-ArmDeployment/Resources/assets/AzureB2C/.DS_Store
-ArmDeployment/Resources/assets/AzureB2C/CustomPolicies/.DS_Store
