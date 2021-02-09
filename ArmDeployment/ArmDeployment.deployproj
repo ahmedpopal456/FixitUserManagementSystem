@@ -29,20 +29,26 @@
       <Visible>False</Visible>
     </None>
     <Content Include="Deploy-AzureResourceGroup.ps1" />
-    <None Include="Resources\assets\AzureB2C\LoginCustomUI\background-left.png" />
-    <None Include="Resources\assets\AzureB2C\LoginCustomUI\css\assets.css" />
-    <None Include="Resources\assets\AzureB2C\LoginCustomUI\css\common.css" />
-    <None Include="Resources\assets\AzureB2C\LoginCustomUI\css\login.css" />
-    <None Include="Resources\assets\AzureB2C\LoginCustomUI\facebook-colored.svg" />
-    <None Include="Resources\assets\AzureB2C\LoginCustomUI\facebook-white.svg" />
-    <None Include="Resources\assets\AzureB2C\LoginCustomUI\login.html" />
-    <None Include="Resources\assets\AzureB2C\SignUpCustomUI\background-right.png" />
-    <None Include="Resources\assets\AzureB2C\SignUpCustomUI\css\background.css" />
-    <None Include="Resources\assets\AzureB2C\SignUpCustomUI\css\common.css" />
-    <None Include="Resources\assets\AzureB2C\SignUpCustomUI\css\signup.css" />
-    <None Include="Resources\assets\AzureB2C\SignUpCustomUI\signup-client.html" />
-    <None Include="Resources\assets\AzureB2C\SignUpCustomUI\signup-craftman.html" />
-    <None Include="Resources\assets\AzureB2C\SignUpCustomUI\signup.html" />
+    <None Include="Resources\assets\AzureB2C\CustomPolicies\PasswordReset.xml" />
+    <None Include="Resources\assets\AzureB2C\CustomPolicies\Signin.xml" />
+    <None Include="Resources\assets\AzureB2C\CustomPolicies\TrustFrameworkBase.xml" />
+    <None Include="Resources\assets\AzureB2C\CustomPolicies\TrustFrameworkExtensions.xml" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\Common\background-left.css" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\Common\background-left.png" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\Common\background-right.css" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\Common\background-right.png" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\Common\common.css" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\LoginCustomUI\css\login.css" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\LoginCustomUI\facebook-colored.svg" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\LoginCustomUI\facebook-white.svg" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\LoginCustomUI\login.html" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\PasswordResetCustomUI\css\passwordReset.css" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\PasswordResetCustomUI\lock-icon.png" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\PasswordResetCustomUI\passwordReset.html" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\SignUpCustomUI\css\signup.css" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\SignUpCustomUI\signup-client.html" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\SignUpCustomUI\signup-craftman.html" />
+    <None Include="Resources\assets\AzureB2C\CustomUI\SignUpCustomUI\signup.html" />
   </ItemGroup>
   <Target Name="GetReferenceAssemblyPaths" />
 </Project>
