@@ -200,7 +200,7 @@
     text-align: center;
     margin-top: -7rem;
     margin-bottom: 3rem;
-    display: block;
+    display: none;
 }
 
 .unified_container .row .panel-default #api .localAccount .create #createAccount {
@@ -374,26 +374,3 @@ h2.title {
 #api .divider h2 {
     display: none;
 }
-
-.unified_container .row .panel-default #api .localAccount .divider h2 {
-    display: inline-flex;
-    font-size: 1.0em;
-    width: 100%;
-    text-align: center;
-    line-height: 0.1em;
-    margin: 18px 0px 20px;
-}
-
-    .unified_container .row .panel-default #api .localAccount .divider h2:before, .localAccount .divider h2:after {
-        content: "";
-        flex: 1 1;
-        border-bottom: 1px solid #000;
-    }
-
-    .unified_container .row .panel-default #api .localAccount .divider h2:before {
-        margin-right: 10px;
-    }
-
-    .unified_container .row .panel-default #api .localAccount .divider h2:after {
-        margin-left: 10px;
-    }
