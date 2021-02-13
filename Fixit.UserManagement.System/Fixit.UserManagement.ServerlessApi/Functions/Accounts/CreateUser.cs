@@ -51,7 +51,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Accounts
       var result = await _userMediator.CreateUserAsync(userAccountCreateRequestDto, cancellationToken);
       if (!result.IsOperationSuccessful && result.OperationException == null)
       {
-        return new BadRequestObjectResult($"A User with the UserPrincipalName {userAccountCreateRequestDto.UserPrincipalName} already exists...");
+        return new BadRequestObjectResult($"A User with the id {userAccountCreateRequestDto.Id} already exists...");
       }
 
       return new OkObjectResult(result);

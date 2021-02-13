@@ -17,6 +17,7 @@ namespace Fixit.User.Management.Lib.Mappers
       #region UserAccountConfiguration
 
       CreateMap<UserDocument, UserAccountCreateRequestDto>()
+        .ForMember(userCreate => userCreate.Id, opts => opts.MapFrom(document => document != null ? document.id : default))
         .ForMember(userCreate => userCreate.UserPrincipalName, opts => opts.MapFrom(document => document != null ? document.UserPrincipalName : default))
         .ForMember(userCreate => userCreate.FirstName, opts => opts.MapFrom(document => document != null ? document.FirstName : default))
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
@@ -24,8 +25,8 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(userCreate => userCreate.Role, opts => opts.MapFrom(document => document != null ? document.Role : default))
         .ReverseMap();
 
-      CreateMap<UserAccountRoleResponseDto, CreateDocumentDto<UserDocument>>()
-        .ForMember(createdDocumentDto => createdDocumentDto.Document, opts => opts.MapFrom(userRole => userRole))
+      CreateMap<UserAccountCreateRequestDto, CreateDocumentDto<UserDocument>>()
+        .ForMember(createdDocumentDto => createdDocumentDto.Document, opts => opts.MapFrom(user => user))
         .ForMember(createdDocumentDto => createdDocumentDto.IsOperationSuccessful, opts => opts.MapFrom(userRole => userRole != null ? userRole.IsOperationSuccessful : default))
         .ForMember(createdDocumentDto => createdDocumentDto.OperationException, opts => opts.MapFrom(userRole => userRole != null ? userRole.OperationException : default))
         .ForMember(createdDocumentDto => createdDocumentDto.OperationMessage, opts => opts.MapFrom(userRole => userRole != null ? userRole.OperationMessage : default))

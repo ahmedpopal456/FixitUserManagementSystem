@@ -43,7 +43,7 @@ namespace Fixit.User.Management.Lib.Mediators
     /// <param name="userAccountCreateRequestDto"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<UserAccountRoleResponseDto> CreateUserAsync(UserAccountCreateRequestDto userAccountCreateRequestDto, CancellationToken cancellationToken);
+    Task<UserAccountCreateRequestDto> CreateUserAsync(UserAccountCreateRequestDto userAccountCreateRequestDto, CancellationToken cancellationToken);
 
     /// <summary>
     /// 
@@ -61,5 +61,14 @@ namespace Fixit.User.Management.Lib.Mediators
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<OperationStatus> DeleteUserAsync(Guid userId, CancellationToken cancellationToken);
-  }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="userAccountResetPasswordRequestDto"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<OperationStatus> UpdateUserPasswordAsync(Guid userId, UserAccountResetPasswordRequestDto userAccountResetPasswordRequestDto, CancellationToken cancellationToken);
+    }
 }

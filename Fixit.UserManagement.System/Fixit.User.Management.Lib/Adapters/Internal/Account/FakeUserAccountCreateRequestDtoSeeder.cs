@@ -11,6 +11,7 @@ namespace Fixit.User.Management.Lib.Adapters.Internal.Account
     {
       UserAccountCreateRequestDto firstUserAccountToCreate = new UserAccountCreateRequestDto
       {
+        Id = "some_id",
         FirstName = "John",
         LastName = "Doe",
         Role = UserRole.Client,

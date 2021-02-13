@@ -26,6 +26,8 @@ namespace Fixit.User.Management.Lib.Adapters
           return (IFakeSeederAdapter<T>)new FakeUserAccountCreateRequestDtoSeeder();
         case nameof(UserAccountStateDto):
           return (IFakeSeederAdapter<T>)new FakeUserAccountStateUpdateRequestDtoSeeder();
+        case nameof(UserAccountResetPasswordRequestDto):
+            return (IFakeSeederAdapter<T>)new FakeUserAccountResetPasswordRequestDtoSeeder();
         default:
           return null;
       }
