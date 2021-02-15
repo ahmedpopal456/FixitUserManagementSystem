@@ -15,7 +15,6 @@
 
   <BuildingBlocks>
     <ClaimsSchema>
-
       <ClaimType Id="address1">
         <DisplayName>Address Line 1 (required)</DisplayName>
         <DataType>string</DataType>
@@ -54,16 +53,64 @@
         <DataType>string</DataType>
         <UserInputType>TextBox</UserInputType>
       </ClaimType>
+
+      <ClaimType Id="role">
+        <DisplayName>User role</DisplayName>
+        <DataType>long</DataType>
+        <UserInputType>DropdownSingleSelect</UserInputType>
+        <Restriction>
+          <Enumeration Text="Client" Value="0" SelectByDefault="false" />
+          <Enumeration Text="Craftsman" Value="1" SelectByDefault="false" />
+        </Restriction>
+      </ClaimType>
+
+      <!-- Returned from the REST API to be used in the token that is issued -->
+      <ClaimType Id="userId">
+        <DataType>long</DataType>
+      </ClaimType>
+
+      <ClaimType Id="userCreateRequestBody">
+        <DisplayName>Request body for create user operation</DisplayName>
+        <DataType>string</DataType>
+      </ClaimType>
     </ClaimsSchema>
+
+    <ClaimsTransformations>
+      <ClaimsTransformation Id="GenerateCreateUserRequestBody" TransformationMethod="GenerateJson">
+        <InputClaims>
+          <InputClaim ClaimTypeReferenceId="givenName" TransformationClaimType="firstName" />
+          <InputClaim ClaimTypeReferenceId="surname" TransformationClaimType="lastName" />
+          <InputClaim ClaimTypeReferenceId="userPrincipalName" TransformationClaimType="userPrincipalName" />
+          <InputClaim ClaimTypeReferenceId="role" TransformationClaimType="role" />
+        </InputClaims>
+        <OutputClaims>
+          <OutputClaim ClaimTypeReferenceId="userCreateRequestBody" TransformationClaimType="outputClaim"/>
+        </OutputClaims>
+      </ClaimsTransformation>
+    </ClaimsTransformations> 
 
     <ContentDefinitions>
       <ContentDefinition Id="api.signin">
-        <LoadUri>~/tenant/templates/AzureBlue/unified.cshtml</LoadUri>
+        <LoadUri>https://stchend.blob.core.windows.net/chend-blobs/login.html</LoadUri>
         <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
         <DataUri>urn:com:microsoft:aad:b2c:elements:unifiedssp:1.0.0</DataUri>
         <Metadata>
           <Item Key="DisplayName">Signin</Item>
         </Metadata>
+        <LocalizedResourcesReferences MergeBehavior="Prepend">
+          <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.signin.en" />
+        </LocalizedResourcesReferences>
+      </ContentDefinition>
+      <ContentDefinition Id="api.localaccountsignup">
+          <LoadUri>https://storageaccountleung9918.blob.core.windows.net/jleung-blob/signup.html</LoadUri>
+          <RecoveryUri>~/common/default_page_error.html</RecoveryUri>
+          <DataUri>urn:com:microsoft:aad:b2c:elements:selfasserted:1.1.0</DataUri>
+          <Metadata>
+            <Item Key="DisplayName">Local account sign up page</Item>
+          </Metadata>
+          <LocalizedResourcesReferences MergeBehavior="Prepend">
+            <LocalizedResourcesReference Language="en" LocalizedResourcesReferenceId="api.localaccountsignup.en" />
+          </LocalizedResourcesReferences>
       </ContentDefinition>
       <ContentDefinition Id="api.localaccountpasswordreset">
         <LoadUri>https://storageaccountleung9918.blob.core.windows.net/jleung-blob/passwordReset.html</LoadUri>
@@ -77,11 +124,25 @@
         </LocalizedResourcesReferences>
       </ContentDefinition>
     </ContentDefinitions>
-    
+
     <Localization Enabled="true">
       <SupportedLanguages DefaultLanguage="en">
         <SupportedLanguage>en</SupportedLanguage>
       </SupportedLanguages>
+      <LocalizedResources Id="api.signin.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="UxElement" StringId="button_signin">Log in</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="forgotpassword_link">Forgot password?</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="divider_title">or</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
+      <LocalizedResources Id="api.localaccountsignup.en">
+        <LocalizedStrings>
+          <LocalizedString ElementType="ClaimType" ElementId="givenName" StringId="DisplayName">First Name</LocalizedString>
+          <LocalizedString ElementType="ClaimType" ElementId="surname" StringId="DisplayName">Last Name</LocalizedString>
+          <LocalizedString ElementType="UxElement" StringId="button_continue">Next</LocalizedString>
+        </LocalizedStrings>
+      </LocalizedResources>
       <LocalizedResources Id="api.localaccountpasswordreset.en">
       	<LocalizedStrings>
       	  <LocalizedString ElementType="UxElement" StringId="button_continue">Confirm</LocalizedString>
@@ -113,8 +174,8 @@
             <Item Key="IdTokenAudience">{{IdentityExperienceFrameworkClientId}}</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="{{ProxyIdentityExperienceFrameworkClientId}}" />
-            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="{{IdentityExperienceFrameworkClientId}}" />
+            <InputClaim ClaimTypeReferenceId="client_id" DefaultValue="4356a5ae-4af5-4ba7-b48a-9bc19b2ec75e" />
+            <InputClaim ClaimTypeReferenceId="resource_id" PartnerClaimType="resource" DefaultValue="bfb8b310-ce24-4154-9c37-30c1eb9c3308" />
           </InputClaims>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -125,10 +186,39 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="AAD-Common">
           <Metadata>
-            <Item Key="ClientId">{{B2CExtensionsAppClientId}}</Item>
-            <Item Key="ApplicationObjectId">{{B2CExtensionsAppObjectId}}</Item>
+            <Item Key="ClientId">c445b297-18c5-4d8c-8fbe-abae9124bf15</Item>
+            <Item Key="ApplicationObjectId">020aa92a-565b-4900-b825-4e42605ac7e2</Item>
           </Metadata>
         </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>REST APIs</DisplayName>
+      <TechnicalProfiles>
+
+        <!-- Custom Restful service -->
+        <TechnicalProfile Id="REST-API-SignUp">
+          <DisplayName>Create new user in CosmosDB upon sign up</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.RestfulProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="ServiceUrl">{{CreateUserAccountAPI}}</Item>
+            <Item Key="SendClaimsIn">Body</Item>
+            <!-- Set AuthenticationType to Basic or ClientCertificate in production environments -->
+            <Item Key="AuthenticationType">None</Item>
+            <!-- REMOVE the following line in production environments -->
+            <Item Key="AllowInsecureAuthInProduction">true</Item>
+          </Metadata>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="firstname" />
+            <InputClaim ClaimTypeReferenceId="surname" PartnerClaimType="lastname" />
+            <InputClaim ClaimTypeReferenceId="userPrincipalName" />
+            <InputClaim ClaimTypeReferenceId="role" />
+            <InputClaim ClaimTypeReferenceId="objectId" />
+          </InputClaims>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
+        </TechnicalProfile>
+
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -154,6 +244,56 @@
       </OrchestrationSteps>
       <ClientDefinition ReferenceId="DefaultWeb" />
     </UserJourney>
+
+    <UserJourney Id="SignUp">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="ClaimsExchange" ContentDefinitionReferenceId="api.localaccountsignup">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="SignUpWithLogonEmailExchange" TechnicalProfileReferenceId="LocalAccountSignUpWithLogonEmail" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <OrchestrationStep Order="3" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="REST-API-SignUp" TechnicalProfileReferenceId="REST-API-SignUp" />
+          </ClaimsExchanges>
+        </OrchestrationStep> 
+        <OrchestrationStep Order="4" Type="InvokeSubJourney">
+          <JourneyList>
+            <Candidate SubJourneyReferenceId="SignInAfterSignUp" />
+          </JourneyList>
+        </OrchestrationStep>
+        <OrchestrationStep Order="5" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" />
+      </OrchestrationSteps>
+      <ClientDefinition ReferenceId="DefaultWeb" />
+    </UserJourney>
   </UserJourneys>
+
+  <SubJourneys>
+    <SubJourney Id="SignInAfterSignUp" Type="Call">
+      <OrchestrationSteps>
+        <OrchestrationStep Order="1" Type="CombinedSignInAndSignUp" ContentDefinitionReferenceId="api.signin">
+          <ClaimsProviderSelections>
+            <ClaimsProviderSelection ValidationClaimsExchangeId="LocalAccountSigninEmailExchange" />
+          </ClaimsProviderSelections>
+          <ClaimsExchanges>
+            <ClaimsExchange Id="LocalAccountSigninEmailExchange" TechnicalProfileReferenceId="SelfAsserted-LocalAccountSignin-Email" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- This step reads any user attributes that we may not have received when in the token. -->
+        <OrchestrationStep Order="2" Type="ClaimsExchange">
+          <ClaimsExchanges>
+            <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
+          </ClaimsExchanges>
+        </OrchestrationStep>
+        <!-- <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" /> -->
+      </OrchestrationSteps>
+    </SubJourney>
+  </SubJourneys>
 
 </TrustFrameworkPolicy>
