@@ -6,8 +6,8 @@
 
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="10.1.1" />
-        <PackageReference Include="Fixit.Core.Connectors" Version="1.0.21" />
-        <PackageReference Include="Fixit.Core.Database" Version="1.0.35" />
-        <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.81" />
+        <PackageReference Include="Fixit.Core.Connectors" Version="1.0.36" />
+        <PackageReference Include="Fixit.Core.Database" Version="1.0.57" />
+        <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.108-beta" />
     </ItemGroup>
 </Project>

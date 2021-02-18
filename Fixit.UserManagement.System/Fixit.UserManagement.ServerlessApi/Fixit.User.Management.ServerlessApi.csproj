@@ -9,7 +9,9 @@
         <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.Http" Version="3.0.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.10" />
         <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.7" />
-        <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.0.0" />
+        <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
+        <PackageReference Include="Fixit.Core.DataContracts" Version="1.0.108-beta" />
+		<PackageReference Include="NUnit" Version="3.13.0" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Fixit.User.Management.Lib\Fixit.User.Management.Lib.csproj" />

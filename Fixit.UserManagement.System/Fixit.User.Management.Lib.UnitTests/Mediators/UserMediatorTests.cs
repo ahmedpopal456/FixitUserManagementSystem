@@ -17,6 +17,7 @@ using Fixit.Core.DataContracts.Users.Operations.Account;
 using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.Connectors.DataContracts;
 using OperationStatus = Fixit.Core.DataContracts.OperationStatus;
+using Fixit.Core.Database.DataContracts;
 
 namespace Fixit.User.Management.Lib.UnitTests.Mediators
 {

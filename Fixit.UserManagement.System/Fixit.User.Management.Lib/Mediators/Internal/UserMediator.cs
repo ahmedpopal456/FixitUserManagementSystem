@@ -3,17 +3,17 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.Core.Connectors.Mediators;
 using Fixit.Core.DataContracts;
 using Fixit.Core.Database.Mediators;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
 using Fixit.Core.DataContracts.Users.Profile;
-using Fixit.User.Management.Lib.Models;
 using Fixit.Core.DataContracts.Users.Enums;
+using Fixit.User.Management.Lib.Models;
 using Microsoft.Extensions.Configuration;
 using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.DataContracts.Users.Operations.Account;
-using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.Core.Connectors.DataContracts;
 
 namespace Fixit.User.Management.Lib.Mediators.Internal
@@ -34,12 +34,12 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 
       if (string.IsNullOrWhiteSpace(databaseName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Database as {{FIXIT-UM-USERDB}} ");
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the User Management Database as {{FIXIT-UM-DB-NAME}} ");
       }
 
       if (string.IsNullOrWhiteSpace(databaseUserTableName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Table as {{FIXIT-UM-USERTABLE}} ");
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the User Management Table as {{FIXIT-UM-DB-USERTABLE}} ");
       }
 
       if (databaseMediator == null)
@@ -281,7 +281,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       }
       return result;
     }
-
     #endregion
+
   }
 }

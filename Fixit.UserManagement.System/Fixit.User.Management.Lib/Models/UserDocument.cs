@@ -29,9 +29,6 @@ namespace Fixit.User.Management.Lib.Models
     public UserState State { get; set; }
 
     [DataMember]
-    public RatingsSummaryDto Rating { get; set; }
-
-    [DataMember]
     public AddressDto Address { get; set; }
 
     [DataMember]
