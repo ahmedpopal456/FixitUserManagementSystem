@@ -15,10 +15,14 @@ using Microsoft.Extensions.Configuration;
 using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.DataContracts.Users.Operations.Account;
 using Fixit.Core.Connectors.DataContracts;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("Fixit.User.Management.Lib.UnitTests")]
+[assembly: InternalsVisibleTo("Fixit.User.Management.ServerlessApi")]
+[assembly: InternalsVisibleTo("Fixit.User.Management.Triggers")]
 namespace Fixit.User.Management.Lib.Mediators.Internal
 {
-  public class UserMediator : IUserMediator
+  internal class UserMediator : IUserMediator
   {
     private readonly IMapper _mapper;
     private readonly IDatabaseTableEntityMediator _databaseUserTable;
@@ -80,20 +84,20 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
     }
 
     #region UserAccountConfiguration
-    public async Task<UserAccountRoleResponseDto> CreateUserAsync(UserAccountCreateRequestDto userAccountCreateRequestDto, CancellationToken cancellationToken)
+    public async Task<UserAccountCreateRequestDto> CreateUserAsync(UserAccountCreateRequestDto userAccountCreateRequestDto, CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
-      UserAccountRoleResponseDto result = new UserAccountRoleResponseDto()
+      UserAccountCreateRequestDto result = new UserAccountCreateRequestDto()
       {
         IsOperationSuccessful = false,
       };
 
-      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.UserPrincipalName == userAccountCreateRequestDto.UserPrincipalName);
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.UserPrincipalName == userAccountCreateRequestDto.UserPrincipalName);
       result.OperationException = userDocumentCollection.OperationException;
-      if (userDocumentCollection != null && userDocumentCollection.IsOperationSuccessful)
+      if (userDocumentCollection.IsOperationSuccessful)
       {
         UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
-        result = _mapper.Map<UserDocument, UserAccountRoleResponseDto>(userDocument);
+        result = _mapper.Map<UserDocument, UserAccountCreateRequestDto>(userDocument);
 
         if (userDocument == null)
         {
@@ -105,7 +109,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           userDocumentToCreate.CreatedTimestampsUtc = currentTime;
 
           CreateDocumentDto<UserDocument> createdUser = await _databaseUserTable.CreateItemAsync(userDocumentToCreate, partitionKey, cancellationToken);
-          result = _mapper.Map<CreateDocumentDto<UserDocument>, UserAccountRoleResponseDto>(createdUser);
+          result = _mapper.Map<CreateDocumentDto<UserDocument>, UserAccountCreateRequestDto>(createdUser);
         }
       }
 
@@ -120,9 +124,9 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         IsOperationSuccessful = false,
       };
 
-      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id.Equals(userId.ToString()));
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id.Equals(userId.ToString()));
       result.OperationException = userDocumentCollection.OperationException;
-      if (userDocumentCollection != null && userDocumentCollection.IsOperationSuccessful)
+      if (userDocumentCollection.IsOperationSuccessful)
       {
           UserDocument userDocumentToUpdate = userDocumentCollection.Results.SingleOrDefault();
         
@@ -130,7 +134,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           { 
             result = _mapper.Map<UserDocument, UserAccountStateDto>(userDocumentToUpdate);
             bool shouldBlockSignIn = userAccountStateDto.State.Equals(UserState.Disabled);
-            var userAdUpdateResponse = await _msGraphClient.UpdateAccountSignInStatusAsync(userDocumentToUpdate.UserPrincipalName, shouldBlockSignIn, cancellationToken);
+            var userAdUpdateResponse = await _msGraphClient.UpdateAccountSignInStatusAsync(userDocumentToUpdate.id, shouldBlockSignIn, cancellationToken);
             result = _mapper.Map<ConnectorDto<UserAccountStateDto>, UserAccountStateDto>(userAdUpdateResponse, result);
 
             if (result.IsOperationSuccessful)
@@ -160,20 +164,42 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         IsOperationSuccessful = false
       };
 
-      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id.Equals(userId.ToString()));
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id.Equals(userId.ToString()));
       result.OperationException = userDocumentCollection.OperationException;
-      if (userDocumentCollection != null && userDocumentCollection.IsOperationSuccessful)
+      if (userDocumentCollection.IsOperationSuccessful)
       {
         UserDocument userDocumentToDelete = userDocumentCollection.Results.SingleOrDefault();
         if (userDocumentToDelete != null)
         {
           string partitionKey = userDocumentToDelete.Role.ToString();
-          result = await _msGraphClient.DeleteAccountAsync(userDocumentToDelete.UserPrincipalName, cancellationToken);
+          result = await _msGraphClient.DeleteAccountAsync(userDocumentToDelete.id, cancellationToken);
 
           if (result.IsOperationSuccessful)
           {
             result = await _databaseUserTable.DeleteItemAsync<UserDocument>(userId.ToString(), partitionKey, cancellationToken);
           }
+        }
+      }
+
+      return result;
+    }
+
+    public async Task<OperationStatus> UpdateUserPasswordAsync(Guid userId, UserAccountResetPasswordRequestDto userAccountResetPasswordRequestDto, CancellationToken cancellationToken)
+    {
+      cancellationToken.ThrowIfCancellationRequested();
+      OperationStatus result = new OperationStatus()
+      {
+        IsOperationSuccessful = false
+      };
+
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id.Equals(userId.ToString()));
+      result.OperationException = userDocumentCollection.OperationException;
+      if (userDocumentCollection.IsOperationSuccessful)
+      {
+        UserDocument userDocumentToUpdate = userDocumentCollection.Results.SingleOrDefault();
+        if (userDocumentToUpdate != null)
+        {
+          result = await _msGraphClient.UpdateAccountPasswordAsync(userDocumentToUpdate.id, userAccountResetPasswordRequestDto.NewPassword, cancellationToken);
         }
       }
 
@@ -187,7 +213,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       cancellationToken.ThrowIfCancellationRequested();
       UserProfileDto result = default(UserProfileDto);
 
-      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
         result = new UserProfileDto()
@@ -213,7 +239,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       cancellationToken.ThrowIfCancellationRequested();
       UserProfileInformationDto result = default(UserProfileInformationDto);
 
-      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
         result = new UserProfileInformationDto()
@@ -250,7 +276,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       cancellationToken.ThrowIfCancellationRequested();
       UserProfilePictureDto result = default(UserProfilePictureDto);
 
-      var (userDocumentCollection, token) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
       {
         result = new UserProfilePictureDto()

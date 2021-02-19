@@ -48,7 +48,6 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
       return isValid;
     }
 
-    // TODO: Do I need a validator if the only thing in my dto is an enum?
     internal static bool IsValidUserStateUpdateRequest(HttpContent httpContent, out UserAccountStateDto userStateDto)
     {
       bool isValid = false;
@@ -61,6 +60,27 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
         {
           userStateDto = userStateDtoDeserialized;
           isValid = true;
+        }
+      }
+      catch
+      {
+        //fall through
+      }
+      return isValid;
+    }
+
+    internal static bool IsValidUserPasswordUpdateRequest(HttpContent httpContent, out UserAccountResetPasswordRequestDto userAccountResetPasswordRequestDto)
+    {
+      bool isValid = false;
+      userAccountResetPasswordRequestDto = null;
+
+      try
+      {
+        var userPasswordResetDtoDeserialized = JsonConvert.DeserializeObject<UserAccountResetPasswordRequestDto>(httpContent.ReadAsStringAsync().Result);
+        isValid = userPasswordResetDtoDeserialized != null && !string.IsNullOrWhiteSpace(userPasswordResetDtoDeserialized.NewPassword);
+        if (isValid)
+        {
+          userAccountResetPasswordRequestDto = userPasswordResetDtoDeserialized;
         }
       }
       catch
