@@ -17,13 +17,7 @@ namespace Fixit.User.Management.Lib.Mappers
   {
     public UserManagementMapper()
     {
-      CreateUserAccountConfigurationMappers();
-      CreateUserProfileConfigurationMappers();
-      CreateUserRatingsConfigurationMappers();
-    }
-
-    private void CreateUserAccountConfigurationMappers()
-    {
+      #region UserAccountConfiguration
       CreateMap<UserDocument, UserAccountCreateRequestDto>()
         .ForMember(userCreate => userCreate.Id, opts => opts.MapFrom(document => document != null ? document.id : default))
         .ForMember(userCreate => userCreate.UserPrincipalName, opts => opts.MapFrom(document => document != null ? document.UserPrincipalName : default))
@@ -75,10 +69,10 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(documentCollectionDto => documentCollectionDto.OperationException, opts => opts.MapFrom(operationStatus => operationStatus != null ? operationStatus.OperationException : default))
         .ForMember(documentCollectionDto => documentCollectionDto.OperationMessage, opts => opts.MapFrom(operationStatus => operationStatus != null ? operationStatus.OperationMessage : default))
         .ReverseMap();
-    }
 
-    private void CreateUserProfileConfigurationMappers()
-    {
+      #endregion
+
+      #region UserProfileConfiguration
       CreateMap<UserProfileDto, UserDocument>()
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
@@ -168,10 +162,9 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
         .ReverseMap();
-    }
+      #endregion
 
-    private void CreateUserRatingsConfigurationMappers()
-    {
+      #region UserRatingConfiguration
       CreateMap<RatingsDto, RatingsDocument>()
         .ForMember(document => document.Ratings, opts => opts.MapFrom(dto => dto != null ? dto.Ratings.ToList() : default))
         .ForMember(document => document.id, opts => opts.Ignore())
@@ -192,6 +185,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(ratingDto => ratingDto.CreatedTimestampUtc, opts => opts.Ignore())
         .ForMember(ratingDto => ratingDto.UpdatedTimestampUtc, opts => opts.Ignore())
         .ReverseMap();
+      #endregion
     }
   }
 }
