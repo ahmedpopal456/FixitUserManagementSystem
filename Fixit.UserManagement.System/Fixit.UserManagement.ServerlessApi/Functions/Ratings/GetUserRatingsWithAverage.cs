@@ -14,42 +14,40 @@ using Fixit.Core.Security.Authorization.AzureFunctions;
 using Fixit.User.Management.Lib.Mediators;
 using Fixit.User.Management.ServerlessApi.Helpers;
 using Fixit.Core.DataContracts.Users.Ratings;
+using Fixit.Core.DataContracts.Users.Operations.Ratings;
 
 namespace Fixit.User.Management.ServerlessApi.Functions.Ratings
 {
-  public class GetPagedUserRatingsAverage : AzureFunctionRoute
+  public class GetUserRatingsWithAverage : AzureFunctionRoute
   {
     private readonly IUserRatingsMediator _userRatingMediator;
     private readonly IMapper _mapper;
 
-    public GetPagedUserRatingsAverage(IUserRatingsMediator userRatingMediator,
+    public GetUserRatingsWithAverage(IUserRatingsMediator userRatingMediator,
                          IMapper mapper) : base()
     {
-      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(GetPagedUserRatingsAverage)} expects a value for {nameof(mapper)}... null argument was provided");
-      _userRatingMediator = userRatingMediator ?? throw new ArgumentNullException($"{nameof(GetPagedUserRatingsAverage)} expects a value for {nameof(userRatingMediator)}... null argument was provided");
+      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(GetUserRatingsWithAverage)} expects a value for {nameof(mapper)}... null argument was provided");
+      _userRatingMediator = userRatingMediator ?? throw new ArgumentNullException($"{nameof(GetUserRatingsWithAverage)} expects a value for {nameof(userRatingMediator)}... null argument was provided");
     }
 
-    [FunctionName("GetPagedUserRatingAverageAsync")]
+    [FunctionName("GetUserRatingAverageAsync")]
     [OpenApiOperation("get", "UserRating")]
     [OpenApiParameter("id", In = ParameterLocation.Path, Required = true, Type = typeof(Guid))]
-    [OpenApiParameter("pageSize", In = ParameterLocation.Query, Required = false, Type = typeof(int))]
-    [OpenApiParameter("pageNumber", In = ParameterLocation.Path, Required = false, Type = typeof(int))]
     [OpenApiParameter("minTimestampUtc", In = ParameterLocation.Query, Required = false, Type = typeof(string))]
     [OpenApiParameter("maxTimestampUtc", In = ParameterLocation.Query, Required = false, Type = typeof(string))]
-    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(RatingsDto))]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users/{id:Guid}/account/ratings/{pageNumber:int}")]
+    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(RatingsResponseDto))]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "users/{id:Guid}/account/ratings")]
                                           HttpRequestMessage httpRequest,
                                           CancellationToken cancellationToken,
-                                          Guid id,
-                                          int pageNumber)
+                                          Guid id)
     {
       int.TryParse(HttpUtility.ParseQueryString(httpRequest.RequestUri.Query).Get("pageSize"), out var parsedPageSize);
       var minTimestampUtc = HttpUtility.ParseQueryString(httpRequest.RequestUri.Query).Get("minTimestampUtc");
       var maxTimestampUtc = HttpUtility.ParseQueryString(httpRequest.RequestUri.Query).Get("maxTimestampUtc");
-      return await GetPagedUserRatingAverageAsync(id, parsedPageSize, cancellationToken, pageNumber, minTimestampUtc, maxTimestampUtc);
+      return await GetUserRatingAverageAsync(id, cancellationToken, minTimestampUtc, maxTimestampUtc);
     }
 
-    public async Task<IActionResult> GetPagedUserRatingAverageAsync(Guid userId, int pageNumber, CancellationToken cancellationToken, int pageSize, string minTimestampUtc, string maxTimestampUtc)
+    public async Task<IActionResult> GetUserRatingAverageAsync(Guid userId, CancellationToken cancellationToken, string minTimestampUtc, string maxTimestampUtc)
     {
       cancellationToken.ThrowIfCancellationRequested();
 
@@ -58,7 +56,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Ratings
 
       if (userId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(userId)} is not valid..");
+        return new BadRequestObjectResult(($"{nameof(GetUserRatingsWithAverage)} expects a value for {nameof(userId)}... null argument was provided."));
       }
 
       if ((minTimestampUtc != null && !OptionalQueryValidators.TryParseTimestampUtc(minTimestampUtc, out minTimestampUtcResult))
@@ -67,11 +65,11 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Ratings
         return new BadRequestObjectResult($"Either {nameof(minTimestampUtc)} or {nameof(maxTimestampUtc)} is invalid, cannot validate TimestampUtc...");
       }
 
-      var result = await _userRatingMediator.GetPagedUserRatingsAverageAsync(userId, pageSize, cancellationToken, pageNumber, minTimestampUtcResult, maxTimestampUtcResult);
-      
+      var result = await _userRatingMediator.GetUserRatingsWithAverageAsync(userId, cancellationToken, minTimestampUtcResult, maxTimestampUtcResult);
+
       if (!result.IsOperationSuccessful)
       {
-        return new NotFoundObjectResult($"User rating with user with id {userId} could not be found..");
+        return new NotFoundObjectResult($"User rating with user with id {userId} could not be found in {nameof(GetUserRatingsWithAverage)}...");
       }
       return new OkObjectResult(result);
     }

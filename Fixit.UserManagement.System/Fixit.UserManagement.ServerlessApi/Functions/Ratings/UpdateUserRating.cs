@@ -49,11 +49,11 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Ratings
 
       if (userId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(userId)} is not valid...");
+        return new BadRequestObjectResult($"{nameof(UpdateUserRating)} expects a value for {nameof(userId)}... null argument was provided.");
       }
       if (ratingId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(ratingId)} is not valid..");
+        return new BadRequestObjectResult($"{nameof(UpdateUserRating)} expects a value for {nameof(ratingId)}... null argument was provided.");
       }
 
       if (!UserRatingDtoValidators.IsValidUserRatingUpdateRequest(httpRequest.Content, out UserRatingsCreateOrUpdateRequestDto ratingsUpdateRequestDto))
@@ -64,7 +64,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Ratings
       var result = await _userRatingMediator.UpdateUserRatingAsync(userId, ratingsUpdateRequestDto, cancellationToken, null, ratingId);
       if (!result.IsOperationSuccessful)
       {
-        return new NotFoundObjectResult($"Rating of user with id {userId} could not be found...");
+        return new NotFoundObjectResult($"Rating of user with id {userId} could not be found in {nameof(UpdateUserRating)}...");
       }
 
       return new OkObjectResult(result);

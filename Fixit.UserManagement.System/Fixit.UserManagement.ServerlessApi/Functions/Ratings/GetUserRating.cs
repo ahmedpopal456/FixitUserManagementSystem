@@ -47,17 +47,17 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Ratings
 
       if (userId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(userId)} is not valid..");
+        return new BadRequestObjectResult($"{nameof(GetUserRating)} expects a value for {nameof(userId)}... null argument was provided.");
       }
       if (ratingId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(ratingId)} is not valid..");
+        return new BadRequestObjectResult($"{nameof(GetUserRating)} expects a value for {nameof(ratingId)}... null argument was provided.");
       }
 
       var result = await _userRatingMediator.GetUserRatingAsync(userId, ratingId, cancellationToken);
       if (!result.IsOperationSuccessful)
       {
-        return new NotFoundObjectResult($"User rating with user with id {userId} could not be found..");
+        return new NotFoundObjectResult($"User rating with user with id {userId} could not be found in {nameof(GetUserRating)}...");
       }
       return new OkObjectResult(result);
     }

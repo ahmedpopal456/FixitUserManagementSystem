@@ -47,7 +47,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Ratings
 
       if (userId.Equals(Guid.Empty))
       {
-        return new BadRequestObjectResult($"{nameof(userId)} is not valid...");
+        return new BadRequestObjectResult($"{nameof(CreateUserRating)} expects a value for {nameof(userId)}... null argument was provided.");
       }
 
       if (!UserRatingDtoValidators.IsValidUserRatingCreateRequest(httpRequest.Content, out UserRatingsCreateOrUpdateRequestDto ratingsCreateRequestDto))

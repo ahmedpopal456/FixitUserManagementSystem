@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fixit.Core.DataContracts.Users.Ratings;
 using Fixit.Core.DataContracts.Users.Operations.Ratings;
+using Fixit.Core.Database.DataContracts.Documents;
+using Fixit.User.Management.Lib.Models;
 
 namespace Fixit.User.Management.Lib.Mediators
 {
@@ -25,7 +27,7 @@ namespace Fixit.User.Management.Lib.Mediators
     /// <param name="minTimestampUtc"></param>
     /// <param name="maxTimestampUtc"></param>
     /// <returns></returns>
-    Task<RatingsResponseDto> GetUserRatingsAverageAsync(Guid userId, CancellationToken cancellationToken, long? minTimestampUtc = null, long? maxTimestampUtc = null);
+    Task<RatingsResponseDto> GetUserRatingsWithAverageAsync(Guid userId, CancellationToken cancellationToken, long? minTimestampUtc = null, long? maxTimestampUtc = null);
 
     /// <summary>
     /// Get paged user rating average
@@ -37,7 +39,7 @@ namespace Fixit.User.Management.Lib.Mediators
     /// <param name="minTimestampUtc"></param>
     /// <param name="maxTimestampUtc"></param>
     /// <returns></returns>
-    Task<RatingsResponseDto> GetPagedUserRatingsAverageAsync(Guid userId, int pageNumber, CancellationToken cancellationToken, int? pageSize = null, long? minTimestampUtc = null, long? maxTimestampUtc = null);
+    Task<PagedDocumentCollectionDto<RatingsDocument>> GetPagedUserRatingsWithAverageAsync(Guid userId, int pageNumber, CancellationToken cancellationToken, int? pageSize = null, long? minTimestampUtc = null, long? maxTimestampUtc = null);
 
     /// <summary>
     /// Create user rating

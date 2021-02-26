@@ -8,6 +8,7 @@ using Fixit.Core.Database.Mediators;
 using Microsoft.Extensions.Configuration;
 using Fixit.User.Management.Lib.Mappers;
 using Fixit.Core.Connectors.Mediators;
+using Fixit.Core.DataContracts.Seeders;
 
 namespace Fixit.User.Management.Lib.UnitTests
 {

@@ -12,6 +12,7 @@ using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Ratings;
 using Fixit.User.Management.Lib.Models;
 using Fixit.Core.DataContracts.Users.Operations.Ratings;
+using System.Linq.Expressions;
 
 namespace Fixit.User.Management.Lib.Mediators.Internal
 {
@@ -30,20 +31,20 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 
       if (string.IsNullOrWhiteSpace(databaseName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Database as {{FIXIT-UM-USERDB}} ");
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Database as {{FIXIT-UM-USERDB}} ");
       }
 
       if (string.IsNullOrWhiteSpace(databaseRatingTableName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Table as {{FIXIT-UM-RATINGSTABLE}} ");
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects the {nameof(configurationProvider)} to have defined the Fix Management Table as {{FIXIT-UM-RATINGSTABLE}} ");
       }
 
       if (databaseMediator == null)
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
-      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(mapper)}... null argument was provided");
+      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _userRatingTable = databaseMediator.GetDatabase(databaseName).GetContainer(databaseRatingTableName);
     }
 
@@ -54,20 +55,20 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
     {
       if (string.IsNullOrWhiteSpace(databaseName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseName)}... null argument was provided");
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(databaseName)}... null argument was provided");
       }
 
       if (string.IsNullOrWhiteSpace(tableName))
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(tableName)}... null argument was provided");
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(tableName)}... null argument was provided");
       }
 
       if (databaseMediator == null)
       {
-        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
-      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(mapper)}... null argument was provided");
+      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _userRatingTable = databaseMediator.GetDatabase(databaseName).GetContainer(tableName);
     }
 
@@ -101,7 +102,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       return result;
     }
 
-    public async Task<RatingsResponseDto> GetUserRatingsAverageAsync(Guid userId, CancellationToken cancellationToken, long? minTimestampUtc = null, long? maxTimestampUtc = null)
+    public async Task<RatingsResponseDto> GetUserRatingsWithAverageAsync(Guid userId, CancellationToken cancellationToken, long? minTimestampUtc = null, long? maxTimestampUtc = null)
     {
       cancellationToken.ThrowIfCancellationRequested();
       var result = default(RatingsResponseDto);
@@ -136,48 +137,42 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       return result;
     }
 
-    public async Task<RatingsResponseDto> GetPagedUserRatingsAverageAsync(Guid userId, int pageNumber, CancellationToken cancellationToken, int? pageSize = null, long? minTimestampUtc = null, long? maxTimestampUtc = null)
+    public async Task<PagedDocumentCollectionDto<RatingsDocument>> GetPagedUserRatingsWithAverageAsync(Guid userId, int pageNumber, CancellationToken cancellationToken, int? pageSize = null, long? minTimestampUtc = null, long? maxTimestampUtc = null)
     {
       cancellationToken.ThrowIfCancellationRequested();
-
-      var result = default(RatingsResponseDto);
+      var result = default(PagedDocumentCollectionDto<RatingsDocument>);
       var ratingDocumentCollection = default(PagedDocumentCollectionDto<RatingsDocument>);
-      pageSize = (pageSize == null || pageSize == 0) ? PageSize : pageSize;
-
+      pageSize = (pageSize == null || pageSize == default(int)) ? PageSize : pageSize;
       var queryRequestOptions = new QueryRequestOptions()
       {
         MaxItemCount = pageSize
       };
-
-      ratingDocumentCollection = await _userRatingTable.GetItemQueryableByPageAsync<RatingsDocument>(pageNumber, queryRequestOptions, cancellationToken, ratingDocument => ratingDocument.EntityId == userId.ToString());
-
+      Expression<Func<RatingsDocument, bool>> expression = ratingDocument => (ratingDocument.EntityId == userId.ToString())
+                                                                          && (minTimestampUtc == null || ratingDocument.CreatedTimestampUtc >= minTimestampUtc)
+                                                                          && (maxTimestampUtc == null || ratingDocument.CreatedTimestampUtc <= maxTimestampUtc);
+      ratingDocumentCollection = await _userRatingTable.GetItemQueryableByPageAsync<RatingsDocument>(pageNumber, queryRequestOptions, cancellationToken, expression);
       if (ratingDocumentCollection != null)
       {
-        result = new RatingsResponseDto()
+        result = new PagedDocumentCollectionDto<RatingsDocument>()
         {
           OperationException = ratingDocumentCollection.OperationException,
           OperationMessage = ratingDocumentCollection.OperationMessage
         };
-
         if (ratingDocumentCollection.IsOperationSuccessful)
         {
           RatingsDocument ratingDocument = ratingDocumentCollection.Results.SingleOrDefault();
-          if (maxTimestampUtc != null || minTimestampUtc != null)
-          {
-            ratingDocument.Ratings = ratingDocument.Ratings.Where(rating => rating.CreatedTimestampUtc <= maxTimestampUtc || rating.CreatedTimestampUtc >= minTimestampUtc);
-          }
           if (ratingDocument != null)
           {
-            result.Ratings = _mapper.Map<RatingsDocument, RatingsDto>(ratingDocument);
+            result.Results.Add(ratingDocument);
+            result.PageNumber = ratingDocumentCollection.PageNumber;
             result.IsOperationSuccessful = true;
           }
-
         }
       }
-
       return result;
     }
 
+    // TODO: Merge Create with Update
     public async Task<RatingResponseDto> CreateUserRatingAsync(Guid userId, UserRatingsCreateOrUpdateRequestDto ratingCreateRequestDto, CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
@@ -187,22 +182,22 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 
       if (ratingDocumentCollection != null)
       {
-        var currentTimestamp = DateTimeOffset.Now.ToUnixTimeSeconds();
+        var DateTimeOffsetUtcNow = DateTimeOffset.Now.ToUnixTimeSeconds();
         var ratingDto = _mapper.Map<UserRatingsCreateOrUpdateRequestDto, RatingDto>(ratingCreateRequestDto);
         ratingDto.Id = Guid.NewGuid();
-        ratingDto.CreatedTimestampUtc = currentTimestamp;
-        ratingDto.UpdatedTimestampUtc = currentTimestamp;
+        ratingDto.CreatedTimestampUtc = DateTimeOffsetUtcNow;
+        ratingDto.UpdatedTimestampUtc = DateTimeOffsetUtcNow;
         ratingDto.Type = RatingType.User;
 
-        if (ratingDocumentCollection.Results.Count == 0)
+        if (!ratingDocumentCollection.Results.Any())
         {
           RatingsDocument ratingDocument = new RatingsDocument
           {
             Ratings = new List<RatingDto>() { ratingDto },
             AverageRating = ratingDto.Score,
             RatingsOfUser = ratingDto.ReviewedUser,
-            CreatedTimestampUtc = currentTimestamp,
-            UpdatedTimestampUtc = currentTimestamp
+            CreatedTimestampUtc = DateTimeOffsetUtcNow,
+            UpdatedTimestampUtc = DateTimeOffsetUtcNow
           };
 
           var createdResponse = await _userRatingTable.CreateItemAsync(ratingDocument, userId.ToString(), cancellationToken);
@@ -222,7 +217,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           }
         }
 
-        else if (ratingDocumentCollection.Results.Count > 0)
+        else
         {
           result = await UpdateUserRatingAsync(userId, ratingCreateRequestDto, cancellationToken, ratingDto, null);
         }
@@ -231,6 +226,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       return result;
     }
 
+    // TODO: Merge Update with Create
     public async Task<RatingResponseDto> UpdateUserRatingAsync(Guid userId, UserRatingsCreateOrUpdateRequestDto ratingUpdateRequestDto, CancellationToken cancellationToken, RatingDto ratingDto, Guid? ratingId = null)
     {
       cancellationToken.ThrowIfCancellationRequested();
