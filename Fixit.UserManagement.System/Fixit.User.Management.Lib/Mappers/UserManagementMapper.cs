@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq;
+using AutoMapper;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
 using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.User.Management.Lib.Models;
@@ -7,6 +8,8 @@ using Fixit.Core.DataContracts.Users.Operations.Account;
 using Fixit.Core.DataContracts;
 using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.Core.Connectors.DataContracts;
+using Fixit.Core.DataContracts.Users.Ratings;
+using Fixit.Core.DataContracts.Users.Operations.Ratings;
 
 namespace Fixit.User.Management.Lib.Mappers
 {
@@ -15,7 +18,6 @@ namespace Fixit.User.Management.Lib.Mappers
     public UserManagementMapper()
     {
       #region UserAccountConfiguration
-
       CreateMap<UserDocument, UserAccountCreateRequestDto>()
         .ForMember(userCreate => userCreate.Id, opts => opts.MapFrom(document => document != null ? document.id : default))
         .ForMember(userCreate => userCreate.UserPrincipalName, opts => opts.MapFrom(document => document != null ? document.UserPrincipalName : default))
@@ -72,16 +74,15 @@ namespace Fixit.User.Management.Lib.Mappers
 
       #region UserProfileConfiguration
       CreateMap<UserProfileDto, UserDocument>()
-        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto.ProfilePictureUrl))
-        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto.FirstName))
-        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto.LastName))
-        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto.Address))
+        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
+        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
+        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
+        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.Documents, opts => opts.Ignore())
         .ForMember(document => document.EntityId, opts => opts.Ignore())
         .ForMember(document => document.Gender, opts => opts.Ignore())
         .ForMember(document => document.id, opts => opts.Ignore())
-        .ForMember(document => document.Rating, opts => opts.Ignore())
         .ForMember(document => document.Role, opts => opts.Ignore())
         .ForMember(document => document.State, opts => opts.Ignore())
         .ForMember(document => document.Status, opts => opts.Ignore())
@@ -91,16 +92,15 @@ namespace Fixit.User.Management.Lib.Mappers
         .ReverseMap();
 
       CreateMap<UserProfileUpdateRequestDto, UserDocument>()
-        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto.FirstName))
-        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto.LastName))
-        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto.Address))
+        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
+        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
+        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.Documents, opts => opts.Ignore())
         .ForMember(document => document.EntityId, opts => opts.Ignore())
         .ForMember(document => document.Gender, opts => opts.Ignore())
         .ForMember(document => document.id, opts => opts.Ignore())
         .ForMember(document => document.ProfilePictureUrl, opts => opts.Ignore())
-        .ForMember(document => document.Rating, opts => opts.Ignore())
         .ForMember(document => document.Role, opts => opts.Ignore())
         .ForMember(document => document.State, opts => opts.Ignore())
         .ForMember(document => document.Status, opts => opts.Ignore())
@@ -110,16 +110,15 @@ namespace Fixit.User.Management.Lib.Mappers
         .ReverseMap();
 
       CreateMap<UserProfileInformationDto, UserDocument>()
-        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto.FirstName))
-        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto.LastName))
-        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto.Address))
+        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
+        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
+        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.Documents, opts => opts.Ignore())
         .ForMember(document => document.EntityId, opts => opts.Ignore())
         .ForMember(document => document.Gender, opts => opts.Ignore())
         .ForMember(document => document.id, opts => opts.Ignore())
         .ForMember(document => document.ProfilePictureUrl, opts => opts.Ignore())
-        .ForMember(document => document.Rating, opts => opts.Ignore())
         .ForMember(document => document.Role, opts => opts.Ignore())
         .ForMember(document => document.State, opts => opts.Ignore())
         .ForMember(document => document.Status, opts => opts.Ignore())
@@ -129,7 +128,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ReverseMap();
 
       CreateMap<UserProfilePictureUpdateRequestDto, UserDocument>()
-        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto.ProfilePictureUrl))
+        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForMember(document => document.Address, opts => opts.Ignore())
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.Documents, opts => opts.Ignore())
@@ -138,7 +137,6 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.Gender, opts => opts.Ignore())
         .ForMember(document => document.id, opts => opts.Ignore())
         .ForMember(document => document.LastName, opts => opts.Ignore())
-        .ForMember(document => document.Rating, opts => opts.Ignore())
         .ForMember(document => document.Role, opts => opts.Ignore())
         .ForMember(document => document.State, opts => opts.Ignore())
         .ForMember(document => document.Status, opts => opts.Ignore())
@@ -148,7 +146,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ReverseMap();
 
       CreateMap<UserProfilePictureDto, UserDocument>()
-        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto.ProfilePictureUrl))
+        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForMember(document => document.Address, opts => opts.Ignore())
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.Documents, opts => opts.Ignore())
@@ -157,13 +155,35 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.Gender, opts => opts.Ignore())
         .ForMember(document => document.id, opts => opts.Ignore())
         .ForMember(document => document.LastName, opts => opts.Ignore())
-        .ForMember(document => document.Rating, opts => opts.Ignore())
         .ForMember(document => document.Role, opts => opts.Ignore())
         .ForMember(document => document.State, opts => opts.Ignore())
         .ForMember(document => document.Status, opts => opts.Ignore())
         .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
         .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
+        .ReverseMap();
+      #endregion
+
+      #region UserRatingConfiguration
+      CreateMap<RatingsDto, RatingsDocument>()
+        .ForMember(document => document.Ratings, opts => opts.MapFrom(dto => dto != null ? dto.Ratings.ToList() : default))
+        .ForMember(document => document.id, opts => opts.Ignore())
+        .ForMember(document => document.RatingsOfUser, opts => opts.Ignore())
+        .ForMember(document => document.CreatedTimestampUtc, opts => opts.Ignore())
+        .ForMember(document => document.UpdatedTimestampUtc, opts => opts.Ignore())
+        .ForMember(document => document.AverageRating, opts => opts.Ignore())
+        .ForMember(document => document.EntityId, opts => opts.Ignore())
+        .ReverseMap();
+
+      CreateMap<UserRatingsCreateOrUpdateRequestDto, RatingDto>()
+        .ForMember(ratingDto => ratingDto.Score, opts => opts.MapFrom(requestDto => requestDto != null ? requestDto.Score : default))
+        .ForMember(ratingDto => ratingDto.Comment, opts => opts.MapFrom(requestDto => requestDto != null ? requestDto.Comment : default))
+        .ForMember(ratingDto => ratingDto.ReviewedByUser, opts => opts.MapFrom(requestDto => requestDto != null ? requestDto.ReviewedByUser : default))
+        .ForMember(ratingDto => ratingDto.ReviewedUser, opts => opts.MapFrom(requestDto => requestDto != null ? requestDto.ReviewedUser : default))
+        .ForMember(ratingDto => ratingDto.Type, opts => opts.MapFrom(requestDto => requestDto != null ? requestDto.Type : default))
+        .ForMember(ratingDto => ratingDto.Id, opts => opts.Ignore())
+        .ForMember(ratingDto => ratingDto.CreatedTimestampUtc, opts => opts.Ignore())
+        .ForMember(ratingDto => ratingDto.UpdatedTimestampUtc, opts => opts.Ignore())
         .ReverseMap();
       #endregion
     }

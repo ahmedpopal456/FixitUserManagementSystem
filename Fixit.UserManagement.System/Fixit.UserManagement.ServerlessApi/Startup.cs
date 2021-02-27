@@ -42,6 +42,13 @@ namespace Fixit.User.Management.ServerlessApi
         var configuration = provider.GetService<IConfiguration>();
         return new UserMediator(mapper, databaseMediator, msGraphMediator, configuration);
       });
+      builder.Services.AddSingleton<IUserRatingsMediator, UserRatingsMediator>(provider =>
+      {
+        var mapper = provider.GetService<IMapper>();
+        var databaseMediator = provider.GetService<IDatabaseMediator>();
+        var configuration = provider.GetService<IConfiguration>();
+        return new UserRatingsMediator(mapper, databaseMediator, configuration);
+      });
     }
   }
 }

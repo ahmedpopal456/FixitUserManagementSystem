@@ -156,5 +156,6 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
              || string.IsNullOrWhiteSpace(addressDto.PhoneNumber);
     }
     #endregion
+
   }
 }
