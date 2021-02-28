@@ -5,7 +5,6 @@ data "azurerm_key_vault" "main" {
 
 data "azurerm_key_vault_secret" "b2cclientsecret" {
   name         = "B2CClientSecret"
-  sensitive    = true
   key_vault_id = data.azurerm_key_vault.main.id
 }
 

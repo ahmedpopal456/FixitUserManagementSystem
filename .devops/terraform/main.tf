@@ -24,6 +24,7 @@ resource "azurerm_app_service_plan" "main" {
   name                = "${var.organization_name}-${var.environment_name}-${var.service_abbreviation}-service-plan"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
+  kind                = "FunctionApp"
 
   sku {
     tier = "Dynamic"
@@ -41,16 +42,16 @@ resource "azurerm_function_app" "main" {
   storage_account_access_key = azurerm_storage_account.app[each.key].primary_access_key
 
   app_settings = {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=false",
-    "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "FIXIT-UM-DB-EP": data.azurerm_cosmosdb_account.main.endpoint,
-    "FIXIT-UM-DB-KEY": data.azurerm_cosmosdb_account.main.primary_key,
-    "FIXIT-UM-DB-NAME": data.azurerm_cosmosdb_account.main.name,
-    "FIXIT-UM-DB-USERTABLE": azurerm_cosmosdb_sql_container.main["users"].name,
-    
-    "FIXIT-UM-CONN-APPID": data.azurerm_key_vault_secret.b2cappid.value,
-    "FIXIT-UM-CONN-TENANTID": data.azurerm_key_vault_secret.b2ctenantid.value,
-    "FIXIT-UM-CONN-CLIENTSECRET": data.azurerm_key_vault_secret.b2cclientsecret.value
+    "AzureWebJobsStorage" : "UseDevelopmentStorage=false",
+    "FUNCTIONS_WORKER_RUNTIME" : "dotnet",
+    "FIXIT-UM-DB-EP" : data.azurerm_cosmosdb_account.main.endpoint,
+    "FIXIT-UM-DB-KEY" : data.azurerm_cosmosdb_account.main.primary_key,
+    "FIXIT-UM-DB-NAME" : data.azurerm_cosmosdb_account.main.name,
+    "FIXIT-UM-DB-USERTABLE" : azurerm_cosmosdb_sql_container.main["users"].name,
+
+    "FIXIT-UM-CONN-APPID" : data.azurerm_key_vault_secret.b2cappid.value,
+    "FIXIT-UM-CONN-TENANTID" : data.azurerm_key_vault_secret.b2ctenantid.value,
+    "FIXIT-UM-CONN-CLIENTSECRET" : data.azurerm_key_vault_secret.b2cclientsecret.value
   }
 }
 
@@ -62,12 +63,12 @@ resource "azurerm_cosmosdb_sql_database" "main" {
 }
 
 resource "azurerm_cosmosdb_sql_container" "main" {
-  for_each              = var.cosmosdb_tables
-  name                  = each.value
-  resource_group_name   = data.azurerm_cosmosdb_account.main.resource_group_name
-  account_name          = data.azurerm_cosmosdb_account.main.name
-  database_name         = azurerm_cosmosdb_sql_database.main.name
-  partition_key_path    = "/EntityId"
+  for_each            = var.cosmosdb_tables
+  name                = each.value
+  resource_group_name = data.azurerm_cosmosdb_account.main.resource_group_name
+  account_name        = data.azurerm_cosmosdb_account.main.name
+  database_name       = azurerm_cosmosdb_sql_database.main.name
+  partition_key_path  = "/EntityId"
 
   indexing_policy {
     indexing_mode = "Consistent"
