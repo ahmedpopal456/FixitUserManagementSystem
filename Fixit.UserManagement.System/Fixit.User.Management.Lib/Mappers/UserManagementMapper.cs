@@ -10,6 +10,7 @@ using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.Core.Connectors.DataContracts;
 using Fixit.Core.DataContracts.Users.Ratings;
 using Fixit.Core.DataContracts.Users.Operations.Ratings;
+using Fixit.Core.DataContracts.Users.Operations;
 
 namespace Fixit.User.Management.Lib.Mappers
 {
@@ -21,6 +22,7 @@ namespace Fixit.User.Management.Lib.Mappers
       CreateMap<UserDocument, UserAccountCreateRequestDto>()
         .ForMember(userCreate => userCreate.Id, opts => opts.MapFrom(document => document != null ? document.id : default))
         .ForMember(userCreate => userCreate.UserPrincipalName, opts => opts.MapFrom(document => document != null ? document.UserPrincipalName : default))
+        .ForMember(userCreate => userCreate.Skills, opts => opts.MapFrom(document => document != null ? document.Skill : default))
         .ForMember(userCreate => userCreate.FirstName, opts => opts.MapFrom(document => document != null ? document.FirstName : default))
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
@@ -184,6 +186,12 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(ratingDto => ratingDto.Id, opts => opts.Ignore())
         .ForMember(ratingDto => ratingDto.CreatedTimestampUtc, opts => opts.Ignore())
         .ForMember(ratingDto => ratingDto.UpdatedTimestampUtc, opts => opts.Ignore())
+        .ReverseMap();
+      #endregion
+
+      #region SkillConfiguration
+      CreateMap<UpdateUserSkillRequestDto, UserDocument>()
+        .ForMember(document => document.id, opts => opts.MapFrom(document => document.UserId))
         .ReverseMap();
       #endregion
     }
