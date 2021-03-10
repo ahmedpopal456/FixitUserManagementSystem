@@ -107,6 +107,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           var userDocumentToCreate = _mapper.Map<UserAccountCreateRequestDto, UserDocument>(userAccountCreateRequestDto);
           userDocumentToCreate.UpdatedTimestampsUtc = currentTime;
           userDocumentToCreate.CreatedTimestampsUtc = currentTime;
+          userDocumentToCreate.State = UserState.Enabled;
 
           CreateDocumentDto<UserDocument> createdUser = await _databaseUserTable.CreateItemAsync(userDocumentToCreate, partitionKey, cancellationToken);
           result = _mapper.Map<CreateDocumentDto<UserDocument>, UserAccountCreateRequestDto>(createdUser);
