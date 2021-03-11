@@ -27,7 +27,7 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
           }
         }
       }
-      catch(Exception e)
+      catch
       {
         // Fall through
       }
