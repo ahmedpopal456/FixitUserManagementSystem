@@ -42,7 +42,7 @@ namespace Fixit.User.Management.Lib.Models
     public UserStatusDto Status { get; set; }
 
     [DataMember]
-    public IEnumerable<SkillDto> Skill { get; set; }
+    public IEnumerable<SkillDto> Skills { get; set; }
 
     [DataMember]
     public string TelephoneNumber { get; set; }
@@ -63,6 +63,14 @@ namespace Fixit.User.Management.Lib.Models
         ProfilePictureUrl = "something.something/something.png",
         FirstName = "John",
         LastName = "Doe",
+        Skills = new List<SkillDto>
+        {
+          new SkillDto
+          {
+            Id = new Guid("db53bc7b-2893-47a9-9134-3696579878df"),
+            Name ="Hello"
+          }   
+        },
         UserPrincipalName = "johnDoe@test.com",
         Role = UserRole.Client,
         Address = new AddressDto()

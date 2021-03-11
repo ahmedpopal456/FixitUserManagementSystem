@@ -80,7 +80,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       if (userDocumentCollection != null && userDocumentCollection.IsOperationSuccessful)
       {
         var userDocument = userDocumentCollection.Results.SingleOrDefault();
-        result = userDocument.Skill.Any() ? userDocument.Skill.ToList() : default;
+        result = userDocument.Skills.Any() ? userDocument.Skills.ToList() : default;
       }
       return result;
     }
@@ -95,13 +95,13 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       if(userSkillDocumentCollection != null)
       {
         var userDocument = userSkillDocumentCollection.Results.SingleOrDefault();
-        userDocument.Skill = updateUserSkillRequestDto.Skill;
+        userDocument.Skills = updateUserSkillRequestDto.Skill;
         var operationStatus = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.EntityId, cancellationToken);
 
         if (operationStatus.IsOperationSuccessful)
         {
           result = _mapper.Map<UserDocument, UpdateUserSkillRequestDto>(userDocument, updateUserSkillRequestDto);
-          result.Skill = userDocument.Skill;
+          result.Skill = userDocument.Skills;
           result.AttributedAtTimestampUtc = result.ExpiresAtTimestampUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
           result.IsOperationSuccessful = true;
         }     

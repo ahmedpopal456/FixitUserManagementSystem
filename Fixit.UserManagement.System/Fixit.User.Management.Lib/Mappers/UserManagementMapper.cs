@@ -22,7 +22,7 @@ namespace Fixit.User.Management.Lib.Mappers
       CreateMap<UserDocument, UserAccountCreateRequestDto>()
         .ForMember(userCreate => userCreate.Id, opts => opts.MapFrom(document => document != null ? document.id : default))
         .ForMember(userCreate => userCreate.UserPrincipalName, opts => opts.MapFrom(document => document != null ? document.UserPrincipalName : default))
-        .ForMember(userCreate => userCreate.Skills, opts => opts.MapFrom(document => document != null ? document.Skill : default))
+        .ForMember(userCreate => userCreate.Skills, opts => opts.MapFrom(document => document != null ? document.Skills : default))
         .ForMember(userCreate => userCreate.FirstName, opts => opts.MapFrom(document => document != null ? document.FirstName : default))
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
