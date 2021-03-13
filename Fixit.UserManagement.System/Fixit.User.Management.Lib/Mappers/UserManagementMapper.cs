@@ -192,6 +192,7 @@ namespace Fixit.User.Management.Lib.Mappers
       #region SkillConfiguration
       CreateMap<UpdateUserSkillRequestDto, UserDocument>()
         .ForMember(document => document.id, opts => opts.MapFrom(document => document.UserId))
+        //.ForMember(document => document.Skills, opts => opts.MapFrom(document => document.Skill))
         .ReverseMap();
       #endregion
     }

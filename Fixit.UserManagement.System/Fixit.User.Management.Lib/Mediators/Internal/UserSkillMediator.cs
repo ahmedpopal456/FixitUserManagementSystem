@@ -64,7 +64,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserSkillMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
-      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(mapper)}... null argument was provided");
+      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserSkillMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(tableName);
     }
 
@@ -100,7 +100,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 
         if (operationStatus.IsOperationSuccessful)
         {
-          result = _mapper.Map<UserDocument, UpdateUserSkillRequestDto>(userDocument, updateUserSkillRequestDto);
+          result = _mapper.Map(userDocument, updateUserSkillRequestDto);
           result.Skill = userDocument.Skills;
           result.AttributedAtTimestampUtc = result.ExpiresAtTimestampUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
           result.IsOperationSuccessful = true;

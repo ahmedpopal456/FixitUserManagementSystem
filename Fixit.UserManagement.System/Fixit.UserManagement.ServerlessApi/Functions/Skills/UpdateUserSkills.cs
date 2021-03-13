@@ -38,10 +38,10 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Skills
                                           CancellationToken cancellationToken,
                                           Guid id)
     {
-      return await GetUserSkillAsync(id, requestMessage, cancellationToken);
+      return await UpdateUserSkillAsync(id, requestMessage, cancellationToken);
     }
 
-    private async Task<IActionResult> GetUserSkillAsync(Guid userId, HttpRequestMessage requestMessage, CancellationToken cancellationToken)
+    private async Task<IActionResult> UpdateUserSkillAsync(Guid userId, HttpRequestMessage requestMessage, CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
 
