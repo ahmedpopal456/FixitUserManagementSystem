@@ -11,7 +11,7 @@ variables:
   buildPlatform: 'x64'
   buildProjects: '**/Fixit.User*Management*.csproj'
   publishFixitUserManagementLib: '**/Fixit.User.Management.Lib.csproj'
-  publishFixitUserManagementServerlessApi: '**/Fixit.UserManagement.ServerlessApi.csproj'
+  publishFixitUserManagementServerlessApi: '**/Fixit.User.Management.ServerlessApi.csproj'
   publishFixitUserManagementTriggers: '**/Fixit.User.Management.Triggers.csproj'
   buildConfiguration: 'Release'
 
