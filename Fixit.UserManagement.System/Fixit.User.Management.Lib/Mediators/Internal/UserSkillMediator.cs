@@ -96,7 +96,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       {
         var userDocument = userSkillDocumentCollection.Results.SingleOrDefault();
         userDocument.Skills = updateUserSkillRequestDto.Skill;
-        var operationStatus = await _databaseUserTable.UpdateItemAsync(userDocument, userDocument.EntityId, cancellationToken);
+        var operationStatus = await _databaseUserTable.UpsertItemAsync(userDocument, userDocument.EntityId, cancellationToken);
 
         if (operationStatus.IsOperationSuccessful)
         {

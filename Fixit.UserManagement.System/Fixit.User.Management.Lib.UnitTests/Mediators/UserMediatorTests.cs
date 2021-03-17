@@ -194,7 +194,6 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       Assert.IsNotNull(actionResult);
       Assert.IsTrue(actionResult.IsOperationSuccessful);
       Assert.IsNull(actionResult.OperationException);
-      Assert.AreEqual(userAccountCreateRequestDto.Role, actionResult.Role);
     }
     #endregion
 
@@ -219,7 +218,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
       //_msGraphMediator.Setup(msGraphClientMediator => msGraphClientMediator.UpdateAccountSignInStatusAsync(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
       //                          .ReturnsAsync(connectorDto);
@@ -257,7 +256,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
       _msGraphMediator.Setup(msGraphClientMediator => msGraphClientMediator.UpdateAccountSignInStatusAsync(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(connectorDto);
@@ -296,7 +295,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(databaseUpdateOperationStatus);
       _msGraphMediator.Setup(msGraphClientMediator => msGraphClientMediator.UpdateAccountSignInStatusAsync(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(connectorDto);
@@ -333,7 +332,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(databaseUpdateOperationStatus);
       _msGraphMediator.Setup(msGraphClientMediator => msGraphClientMediator.UpdateAccountSignInStatusAsync(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(connectorUpdateOperationStatus);
@@ -371,7 +370,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(databaseUpdateOperationStatus);
       _msGraphMediator.Setup(msGraphClientMediator => msGraphClientMediator.UpdateAccountSignInStatusAsync(It.IsAny<string>(), It.IsAny<bool>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(connectorDto);
@@ -801,7 +800,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -832,7 +831,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -862,7 +861,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -896,7 +895,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -926,7 +925,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -961,7 +960,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -992,7 +991,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -1022,7 +1021,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -1056,7 +1055,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -1086,7 +1085,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act

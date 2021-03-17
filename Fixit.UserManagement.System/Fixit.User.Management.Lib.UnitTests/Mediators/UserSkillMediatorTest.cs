@@ -115,7 +115,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       await Assert.ThrowsExceptionAsync<NullReferenceException>(async () => await _userSkillMediator.UpdateUserSkillAsync(userIdGuid, userSkillUpdateRequestDto, cancellationToken));
@@ -139,7 +139,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<UserDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<UserDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<UserDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(databaseUpdateOperationStatus);
 
       //Act

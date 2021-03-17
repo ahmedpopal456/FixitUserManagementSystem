@@ -264,7 +264,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 
           ratingDocument.UpdatedTimestampUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-          var operationStatus = await _userRatingTable.UpdateItemAsync(ratingDocument, ratingDocument.EntityId, cancellationToken);
+          var operationStatus = await _userRatingTable.UpsertItemAsync(ratingDocument, ratingDocument.EntityId, cancellationToken);
 
           result.OperationException = operationStatus.OperationException;
           result.OperationMessage = operationStatus.OperationMessage;

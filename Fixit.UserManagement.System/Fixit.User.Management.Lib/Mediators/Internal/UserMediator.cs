@@ -143,7 +143,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
               userDocumentToUpdate.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
               string partitionKey = userDocumentToUpdate.Role.ToString();
-              var databaseUpdateResponse = await _databaseUserTable.UpdateItemAsync(userDocumentToUpdate, partitionKey, cancellationToken);
+              var databaseUpdateResponse = await _databaseUserTable.UpsertItemAsync(userDocumentToUpdate, partitionKey, cancellationToken);
               result = _mapper.Map<OperationStatus, UserAccountStateDto>(databaseUpdateResponse, result);
 
               if (result.IsOperationSuccessful)
@@ -256,7 +256,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
             userDocument = _mapper.Map<UserProfileUpdateRequestDto, UserDocument>(userProfileUpdateRequestDto, userDocument);
             userDocument.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-            var operationStatus = await _databaseUserTable.UpdateItemAsync(userDocument, partitionKey, cancellationToken);
+            var operationStatus = await _databaseUserTable.UpsertItemAsync(userDocument, partitionKey, cancellationToken);
             result.OperationException = operationStatus.OperationException;
             result.OperationMessage = operationStatus.OperationMessage;
 
@@ -293,7 +293,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
             userDocument = _mapper.Map<UserProfilePictureUpdateRequestDto, UserDocument>(userProfilePictureUpdateRequestDto, userDocument);
             userDocument.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
 
-            var operationStatus = await _databaseUserTable.UpdateItemAsync(userDocument, partitionKey, cancellationToken);
+            var operationStatus = await _databaseUserTable.UpsertItemAsync(userDocument, partitionKey, cancellationToken);
             result.OperationException = operationStatus.OperationException;
             result.OperationMessage = operationStatus.OperationMessage;
 
