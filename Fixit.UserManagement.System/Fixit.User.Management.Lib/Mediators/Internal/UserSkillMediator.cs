@@ -100,8 +100,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 
         if (operationStatus.IsOperationSuccessful)
         {
-          result = _mapper.Map(userDocument, updateUserSkillRequestDto);
-          result.Skill = userDocument.Skills;
+          result = new UpdateUserSkillRequestDto {Skill = userDocument.Skills, UserId = Guid.Parse(userDocument.id)};
           result.AttributedAtTimestampUtc = result.ExpiresAtTimestampUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
           result.IsOperationSuccessful = true;
         }     
