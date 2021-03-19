@@ -98,7 +98,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         userDocument.Skills = updateUserSkillRequestDto.Skill;
         var operationStatus = await _databaseUserTable.UpsertItemAsync(userDocument, userDocument.EntityId, cancellationToken);
 
-        if (operationStatus.IsOperationSuccessful)
+        if (operationStatus.IsOperationSuccessful && Guid.TryParse(userDocument.id, out var newGuid))
         {
           result = new UpdateUserSkillRequestDto {Skill = userDocument.Skills, UserId = Guid.Parse(userDocument.id)};
           result.AttributedAtTimestampUtc = result.ExpiresAtTimestampUtc = DateTimeOffset.Now.ToUnixTimeSeconds();

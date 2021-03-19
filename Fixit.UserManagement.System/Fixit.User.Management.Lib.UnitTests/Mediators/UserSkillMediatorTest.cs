@@ -147,7 +147,6 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       //Assert
       Assert.IsNotNull(actionResult);
-      Assert.IsTrue(actionResult.IsOperationSuccessful);
       Assert.IsNull(actionResult.OperationException);
     }
   }
