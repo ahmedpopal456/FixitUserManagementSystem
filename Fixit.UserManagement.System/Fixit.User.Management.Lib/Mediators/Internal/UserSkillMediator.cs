@@ -14,7 +14,6 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 {
   public class UserSkillMediator : IUserSkillMediator
   {
-    private readonly IMapper _mapper;
     private readonly IDatabaseTableEntityMediator _databaseUserTable;
 
     public UserSkillMediator(IMapper mapper,
@@ -39,7 +38,6 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserSkillMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
-      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserSkillMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(databaseUserTableName);
     }
 
@@ -64,7 +62,6 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserSkillMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
-      _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserSkillMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(tableName);
     }
 
