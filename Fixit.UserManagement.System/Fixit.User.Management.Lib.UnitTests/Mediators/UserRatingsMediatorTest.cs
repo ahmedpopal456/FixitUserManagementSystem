@@ -366,7 +366,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
                                     .ReturnsAsync((documentCollectionGet, continuationToken));
 
       // UpdateItemAsync is used here because it updates the Rating list of an existing item in the Database
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync<RatingsDocument>(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync<RatingsDocument>(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                     .ReturnsAsync(operationStatus);
 
       // Act
@@ -401,7 +401,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<RatingsDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<RatingsDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
 
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -435,7 +435,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<RatingsDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<RatingsDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
 
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -467,7 +467,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<RatingsDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<RatingsDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
 
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -503,7 +503,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<RatingsDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<RatingsDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
 
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act
@@ -535,7 +535,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.GetItemQueryableAsync<RatingsDocument>(continuationToken, It.IsAny<CancellationToken>(), It.IsAny<Expression<Func<RatingsDocument, bool>>>(), null))
                                   .ReturnsAsync((documentCollection, continuationToken));
 
-      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpdateItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
+      _databaseTableEntityMediator.Setup(databaseTableEntityMediator => databaseTableEntityMediator.UpsertItemAsync(It.IsAny<RatingsDocument>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                                   .ReturnsAsync(operationStatus);
 
       //Act

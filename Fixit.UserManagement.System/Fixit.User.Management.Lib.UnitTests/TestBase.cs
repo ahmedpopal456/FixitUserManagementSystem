@@ -1,6 +1,4 @@
-﻿using System;
-using Moq;
-using Fixit.Core.DataContracts;
+﻿using Moq;
 using Fixit.User.Management.Lib.Adapters;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AutoMapper;
