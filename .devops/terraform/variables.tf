@@ -34,13 +34,13 @@ variable "function_apps" {
   default = [
     "api",
     "trigger",
-    "lib"
   ]
 }
 
 variable "cosmosdb_tables" {
   type = map(string)
   default = {
-    users = "Users"
+    users = "Users",
+    userratings = "UserRatings"
   }
 }

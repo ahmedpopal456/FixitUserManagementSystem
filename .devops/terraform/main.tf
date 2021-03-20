@@ -40,14 +40,25 @@ resource "azurerm_function_app" "main" {
   app_service_plan_id        = azurerm_app_service_plan.main.id
   storage_account_name       = azurerm_storage_account.app[each.key].name
   storage_account_access_key = azurerm_storage_account.app[each.key].primary_access_key
+  version                    = "~3"
+
+  site_config {
+    scm_type = "VSTSRM"
+  }
 
   app_settings = {
     "AzureWebJobsStorage" : "UseDevelopmentStorage=false",
-    "FUNCTIONS_WORKER_RUNTIME" : "dotnet",
+    "WEBSITE_ENABLE_SYNC_UPDATE_SITE" = "true",
+    "WEBSITE_RUN_FROM_PACKAGE"        = "1",
+    "APPINSIGHTS_INSTRUMENTATIONKEY"  = data.azurerm_application_insights.main.instrumentation_key,
+    "WEBSITE_NODE_DEFAULT_VERSION"    = "10.14.1"
+    "FUNCTIONS_WORKER_RUNTIME"        = "dotnet",
+
     "FIXIT-UM-DB-EP" : data.azurerm_cosmosdb_account.main.endpoint,
     "FIXIT-UM-DB-KEY" : data.azurerm_cosmosdb_account.main.primary_key,
-    "FIXIT-UM-DB-NAME" : data.azurerm_cosmosdb_account.main.name,
+    "FIXIT-UM-DB-NAME" : var.organization_name,
     "FIXIT-UM-DB-USERTABLE" : azurerm_cosmosdb_sql_container.main["users"].name,
+    "FIXIT-UM-DB-RATINGSTABLE" : azurerm_cosmosdb_sql_container.main["userratings"].name,
 
     "FIXIT-UM-CONN-APPID" : data.azurerm_key_vault_secret.b2cappid.value,
     "FIXIT-UM-CONN-TENANTID" : data.azurerm_key_vault_secret.b2ctenantid.value,

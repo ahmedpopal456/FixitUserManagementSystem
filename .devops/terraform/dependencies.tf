@@ -20,5 +20,10 @@ data "azurerm_key_vault_secret" "b2ctenantid" {
 
 data "azurerm_cosmosdb_account" "main" {
   name                = "${var.organization_name}-${var.environment_name}-common-cosmosdb"
-  resource_group_name = "fixit-dev-common"
+  resource_group_name = "${var.organization_name}-${var.environment_name}-common"
+}
+
+data "azurerm_application_insights" "main" {
+  name                = "${var.organization_name}-${var.environment_name}-common-ai"
+  resource_group_name = "${var.organization_name}-${var.environment_name}-common"
 }
