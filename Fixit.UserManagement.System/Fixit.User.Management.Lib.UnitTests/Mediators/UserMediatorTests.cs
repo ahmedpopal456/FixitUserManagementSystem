@@ -18,6 +18,7 @@ using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.Connectors.DataContracts;
 using OperationStatus = Fixit.Core.DataContracts.OperationStatus;
 using Fixit.Core.Database.DataContracts;
+using Microsoft.Azure.Cosmos;
 
 namespace Fixit.User.Management.Lib.UnitTests.Mediators
 {
@@ -51,6 +52,8 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _msGraphMediator = new Mock<IMicrosoftGraphMediator>();
 
+      _cosmosClient = new Mock<CosmosClient>();
+
       // Create Seeders
       _fakeUserDocuments = _fakeDtoSeedFactory.CreateSeederFactory<UserDocument>(new UserDocument());
       _fakeUserAccountCreateRequestDtos = _fakeDtoSeedFactory.CreateSeederFactory(new UserAccountCreateRequestDto());
@@ -68,6 +71,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       _userMediator = new UserMediator(_mapperConfiguration.CreateMapper(),
                                        _databaseMediator.Object,
                                        _msGraphMediator.Object,
+                                       _cosmosClient.Object,
                                        _userDatabaseName,
                                        _userDatabaseTableName);
     }

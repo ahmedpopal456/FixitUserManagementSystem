@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.Lib",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.Lib.UnitTests", "Fixit.User.Management.Lib.UnitTests\Fixit.User.Management.Lib.UnitTests.csproj", "{59EDD94E-E079-4CA6-AEEE-F12F514CED6E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixit.User.Management.ServerlessApi", "Fixit.UserManagement.ServerlessApi\Fixit.User.Management.ServerlessApi.csproj", "{F50608AF-446C-4667-BD98-7C1761A89430}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.ServerlessApi", "Fixit.UserManagement.ServerlessApi\Fixit.User.Management.ServerlessApi.csproj", "{F50608AF-446C-4667-BD98-7C1761A89430}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fixit.User.Management.Triggers", "Fixit.User.Management.Triggers\Fixit.User.Management.Triggers.csproj", "{11618C30-92B7-4146-82B9-C1B362F80F21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fixit.User.Management.Triggers", "Fixit.User.Management.Triggers\Fixit.User.Management.Triggers.csproj", "{11618C30-92B7-4146-82B9-C1B362F80F21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

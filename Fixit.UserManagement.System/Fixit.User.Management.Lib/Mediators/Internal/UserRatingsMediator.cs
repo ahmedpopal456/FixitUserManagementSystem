@@ -20,10 +20,12 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
   {
     private readonly IMapper _mapper;
     private readonly IDatabaseTableEntityMediator _userRatingTable;
+    private readonly Container _ratingsContainer;
     private const int PageSize = 20;
 
     public UserRatingsMediator(IMapper mapper,
                               IDatabaseMediator databaseMediator,
+                              CosmosClient cosmosClient,
                               IConfiguration configurationProvider)
     {
       var databaseName = configurationProvider["FIXIT-UM-DB-NAME"];
@@ -44,12 +46,19 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
+      if (cosmosClient == null)
+      {
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(cosmosClient)}... null argument was provided");
+      }
+
       _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _userRatingTable = databaseMediator.GetDatabase(databaseName).GetContainer(databaseRatingTableName);
+      _ratingsContainer = cosmosClient.GetContainer(databaseName, databaseRatingTableName);
     }
 
     public UserRatingsMediator(IMapper mapper,
                               IDatabaseMediator databaseMediator,
+                              CosmosClient cosmosClient,
                               string databaseName,
                               string tableName)
     {
@@ -68,8 +77,14 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
+      if (cosmosClient == null)
+      {
+        throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(cosmosClient)}... null argument was provided");
+      }
+
       _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserRatingsMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _userRatingTable = databaseMediator.GetDatabase(databaseName).GetContainer(tableName);
+      _ratingsContainer = cosmosClient.GetContainer(databaseName, tableName);
     }
 
     #region UserRatingConfiguration
@@ -278,6 +293,24 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       }
 
       return result;
+    }
+
+    public async Task<List<RatingListDocument>> GetAllUserRatingsAsync(CancellationToken cancellationToken)
+    {
+      cancellationToken.ThrowIfCancellationRequested();
+      QueryDefinition query = new QueryDefinition("SELECT ur.id, ur.EntityId, ur.AverageRating, ARRAY_LENGTH(ur.Ratings) as ReviewCount FROM UserRating ur");
+
+      List<RatingListDocument> results = new List<RatingListDocument>();
+      using (FeedIterator<RatingListDocument> resultSetIterator = _ratingsContainer.GetItemQueryIterator<RatingListDocument>(query))
+      {
+        while (resultSetIterator.HasMoreResults)
+        {
+          FeedResponse<RatingListDocument> response = await resultSetIterator.ReadNextAsync();
+          results.AddRange(response);
+        }
+
+      }
+      return results;
     }
     #endregion
   }

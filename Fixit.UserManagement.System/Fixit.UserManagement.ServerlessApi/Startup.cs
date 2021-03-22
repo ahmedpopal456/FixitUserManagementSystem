@@ -10,6 +10,7 @@ using Fixit.Core.Database;
 using Fixit.Core.Database.Mediators;
 using Fixit.Core.Connectors;
 using Fixit.Core.Connectors.Mediators;
+using Microsoft.Azure.Cosmos;
 
 [assembly: FunctionsStartup(typeof(Startup))]
 namespace Fixit.User.Management.ServerlessApi
@@ -30,6 +31,7 @@ namespace Fixit.User.Management.ServerlessApi
 
       DatabaseFactory databaseFactory = new DatabaseFactory(_configuration["FIXIT-UM-DB-EP"], _configuration["FIXIT-UM-DB-KEY"]);
       ConnectorFactory connectorFactory = new ConnectorFactory(_configuration["FIXIT-UM-CONN-APPID"], _configuration["FIXIT-UM-CONN-TENANTID"], _configuration["FIXIT-UM-CONN-CLIENTSECRET"]);
+      CosmosClient cosmosClient = new CosmosClient(_configuration["FIXIT-UM-DB-EP"], _configuration["FIXIT-UM-DB-KEY"]);
 
       builder.Services.AddSingleton<IMapper>(mapperConfig.CreateMapper());
       builder.Services.AddSingleton<IDatabaseMediator>(databaseFactory.CreateCosmosClient());
@@ -40,14 +42,14 @@ namespace Fixit.User.Management.ServerlessApi
         var databaseMediator = provider.GetService<IDatabaseMediator>();
         var msGraphMediator = provider.GetService<IMicrosoftGraphMediator>();
         var configuration = provider.GetService<IConfiguration>();
-        return new UserMediator(mapper, databaseMediator, msGraphMediator, configuration);
+        return new UserMediator(mapper, databaseMediator, msGraphMediator, cosmosClient, configuration);
       });
       builder.Services.AddSingleton<IUserRatingsMediator, UserRatingsMediator>(provider =>
       {
         var mapper = provider.GetService<IMapper>();
         var databaseMediator = provider.GetService<IDatabaseMediator>();
         var configuration = provider.GetService<IConfiguration>();
-        return new UserRatingsMediator(mapper, databaseMediator, configuration);
+        return new UserRatingsMediator(mapper, databaseMediator, cosmosClient, configuration);
       });
       builder.Services.AddSingleton<IUserSkillMediator, UserSkillMediator>(provider =>
       {

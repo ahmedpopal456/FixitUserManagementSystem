@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Operations.Account;
 using Fixit.Core.DataContracts.Users.Account;
+using System.Linq;
 
 namespace Fixit.User.Management.ServerlessApi.Helpers
 {
@@ -143,6 +144,18 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
       {
         // Fall through 
       }
+      return isValid;
+    }
+
+    public static bool IsValidEntityId(string entityId, out string entity)
+    {
+      entity = default;
+      var isValid = !string.IsNullOrWhiteSpace(entityId) && (entityId.ToLower().Equals("craftsman") || entityId.ToLower().Equals("client"));
+      if (isValid)
+      {
+        entity = entityId.First().ToString().ToUpper() + entityId[1..].ToLower();
+      }
+
       return isValid;
     }
 

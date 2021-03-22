@@ -16,6 +16,9 @@ using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.DataContracts.Users.Operations.Account;
 using Fixit.Core.Connectors.DataContracts;
 using System.Runtime.CompilerServices;
+using Microsoft.Azure.Cosmos;
+using System.Collections.Generic;
+using Fixit.Core.DataContracts.Users;
 
 [assembly: InternalsVisibleTo("Fixit.User.Management.Lib.UnitTests")]
 [assembly: InternalsVisibleTo("Fixit.User.Management.ServerlessApi")]
@@ -27,10 +30,12 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
     private readonly IMapper _mapper;
     private readonly IDatabaseTableEntityMediator _databaseUserTable;
     private readonly IMicrosoftGraphMediator _msGraphClient;
+    private readonly Container _userContainer;
 
     public UserMediator(IMapper mapper,
                         IDatabaseMediator databaseMediator,
                         IMicrosoftGraphMediator msGraphMediator,
+                        CosmosClient cosmosClient,
                         IConfiguration configurationProvider)
     {
       var databaseName = configurationProvider["FIXIT-UM-DB-NAME"];
@@ -51,14 +56,21 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
+      if (cosmosClient == null)
+      {
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(cosmosClient)}... null argument was provided");
+      }
+
       _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _msGraphClient = msGraphMediator ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(msGraphMediator)}... null argument was provided");
       _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(databaseUserTableName);
+      _userContainer = cosmosClient.GetContainer(databaseName, databaseUserTableName);
     }
 
     public UserMediator(IMapper mapper,
                         IDatabaseMediator databaseMediator,
                         IMicrosoftGraphMediator msGraphMediator,
+                        CosmosClient cosmosClient,
                         string databaseName,
                         string tableName)
     {
@@ -78,9 +90,15 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(databaseMediator)}... null argument was provided");
       }
 
+      if (cosmosClient == null)
+      {
+        throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(cosmosClient)}... null argument was provided");
+      }
+
       _mapper = mapper ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(mapper)}... null argument was provided");
       _msGraphClient = msGraphMediator ?? throw new ArgumentNullException($"{nameof(UserMediator)} expects a value for {nameof(msGraphMediator)}... null argument was provided");
       _databaseUserTable = databaseMediator.GetDatabase(databaseName).GetContainer(tableName);
+      _userContainer = cosmosClient.GetContainer(databaseName, tableName);
     }
 
     #region UserAccountConfiguration
@@ -307,6 +325,30 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
         }
       }
       return result;
+    }
+
+    public async Task<List<UserDto>> GetUsersAsync(string entity, CancellationToken cancellationToken)
+    {
+      cancellationToken.ThrowIfCancellationRequested();
+      QueryDefinition query = new QueryDefinition("SELECT * FROM Users u WHERE u.State=1");
+
+      List<UserDto> results = new List<UserDto>();
+      using (FeedIterator<UserDto> resultSetIterator = _userContainer.GetItemQueryIterator<UserDto>(
+          query,
+          requestOptions: new QueryRequestOptions()
+          {
+            PartitionKey = new PartitionKey(entity)
+          }))
+      {
+        while (resultSetIterator.HasMoreResults)
+        {
+          FeedResponse<UserDto> response = await resultSetIterator.ReadNextAsync();
+          results.AddRange(response);
+        }
+
+      }
+
+      return results;
     }
     #endregion
 

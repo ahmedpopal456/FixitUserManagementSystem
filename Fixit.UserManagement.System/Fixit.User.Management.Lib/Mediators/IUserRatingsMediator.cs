@@ -5,6 +5,7 @@ using Fixit.Core.DataContracts.Users.Ratings;
 using Fixit.Core.DataContracts.Users.Operations.Ratings;
 using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.User.Management.Lib.Models;
+using System.Collections.Generic;
 
 namespace Fixit.User.Management.Lib.Mediators
 {
@@ -60,5 +61,13 @@ namespace Fixit.User.Management.Lib.Mediators
     /// <param name="ratingId"></param>
     /// <returns></returns>
     Task<RatingResponseDto> UpdateUserRatingAsync(Guid userId, UserRatingsCreateOrUpdateRequestDto ratingUpdateRequestDto, CancellationToken cancellationToken, RatingDto ratingDto, Guid? ratingId = null);
+
+    /// <summary>
+    /// Get a list of all User Ratings
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<List<RatingListDocument>> GetAllUserRatingsAsync(CancellationToken cancellationToken);
+
   }
 }

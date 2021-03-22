@@ -13,6 +13,7 @@ using System.Linq.Expressions;
 using System.Linq;
 using OperationStatus = Fixit.Core.DataContracts.OperationStatus;
 using Fixit.Core.DataContracts.Users.Operations.Ratings;
+using Microsoft.Azure.Cosmos;
 
 namespace Fixit.User.Management.Lib.UnitTests.Mediators
 {
@@ -39,6 +40,8 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       _databaseTableMediator = new Mock<IDatabaseTableMediator>();
       _databaseTableEntityMediator = new Mock<IDatabaseTableEntityMediator>();
 
+      _cosmosClient = new Mock<CosmosClient>();
+
       // Create Seeders
       _fakeUserRatingsDocuments = _fakeDtoSeedFactory.CreateSeederFactory<RatingsDocument>(new RatingsDocument());
       _fakeUserRatingsCreateOrUpdateRequestDto = _fakeDtoSeedFactory.CreateSeederFactory(new UserRatingsCreateOrUpdateRequestDto());
@@ -50,6 +53,7 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
 
       _userRatingsMediator = new UserRatingsMediator(_mapperConfiguration.CreateMapper(),
                                                      _databaseMediator.Object,
+                                                     _cosmosClient.Object,
                                                      _userDatabaseName,
                                                      _userDatabaseTableName);
     }
