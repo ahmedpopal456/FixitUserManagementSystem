@@ -350,6 +350,32 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
 
       return results;
     }
+
+    public async Task<UserSummaryResponseDto> GetUserSummaryAsync(Guid userId, CancellationToken cancellationToken)
+    {
+      cancellationToken.ThrowIfCancellationRequested();
+      UserSummaryResponseDto result = default(UserSummaryResponseDto);
+
+      var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
+      if (userDocumentCollection != null)
+      {
+        result = new UserSummaryResponseDto()
+        {
+          OperationException = userDocumentCollection.OperationException,
+          OperationMessage = userDocumentCollection.OperationMessage
+        };
+        if (userDocumentCollection.IsOperationSuccessful)
+        {
+          UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
+          if (userDocument != null)
+          {
+            result = _mapper.Map<UserDocument, UserSummaryResponseDto>(userDocument);
+            result.IsOperationSuccessful = true;
+          }
+        }
+      }
+      return result;
+    }
     #endregion
 
   }

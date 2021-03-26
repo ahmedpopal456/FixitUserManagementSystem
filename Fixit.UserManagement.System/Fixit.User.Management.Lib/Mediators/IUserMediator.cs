@@ -7,13 +7,20 @@ using Fixit.Core.DataContracts;
 using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.DataContracts.Users.Operations.Account;
 using System.Collections.Generic;
-using Fixit.User.Management.Lib.Models;
 using Fixit.Core.DataContracts.Users;
 
 namespace Fixit.User.Management.Lib.Mediators
 {
   public interface IUserMediator
   {
+    /// <summary>
+    /// Get user summary
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<UserSummaryResponseDto> GetUserSummaryAsync(Guid userId, CancellationToken cancellationToken);
+
     /// <summary>
     /// Get user profile
     /// </summary>
