@@ -67,7 +67,7 @@ namespace Fixit.User.Management.Lib.Mediators
     /// </summary>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<List<RatingListDocument>> GetAllUserRatingsAsync(CancellationToken cancellationToken);
+    Task<List<RatingListResponseDto>> GetAllUserRatingsAsync(CancellationToken cancellationToken);
 
   }
 }

@@ -295,17 +295,17 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       return result;
     }
 
-    public async Task<List<RatingListDocument>> GetAllUserRatingsAsync(CancellationToken cancellationToken)
+    public async Task<List<RatingListResponseDto>> GetAllUserRatingsAsync(CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
       QueryDefinition query = new QueryDefinition("SELECT ur.id, ur.EntityId, ur.AverageRating, ARRAY_LENGTH(ur.Ratings) as ReviewCount FROM UserRating ur");
 
-      List<RatingListDocument> results = new List<RatingListDocument>();
-      using (FeedIterator<RatingListDocument> resultSetIterator = _ratingsContainer.GetItemQueryIterator<RatingListDocument>(query))
+      List<RatingListResponseDto> results = new List<RatingListResponseDto>();
+      using (FeedIterator<RatingListResponseDto> resultSetIterator = _ratingsContainer.GetItemQueryIterator<RatingListResponseDto>(query))
       {
         while (resultSetIterator.HasMoreResults)
         {
-          FeedResponse<RatingListDocument> response = await resultSetIterator.ReadNextAsync();
+          FeedResponse<RatingListResponseDto> response = await resultSetIterator.ReadNextAsync();
           results.AddRange(response);
         }
 
