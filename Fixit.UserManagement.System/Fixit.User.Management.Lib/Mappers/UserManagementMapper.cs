@@ -171,6 +171,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForMember(document => document.Role, opts => opts.MapFrom(dto => dto != null ? dto.Role : default))
         .ForMember(document => document.Status, opts => opts.MapFrom(dto => dto != null ? dto.Status : default))
+        .ForMember(document => document.UserPrincipalName, opts => opts.MapFrom(dto => dto != null ? dto.UserPrincipalName : null))
         .ForMember(document => document.id, opts => opts.Ignore())
         .ForMember(document => document.Address, opts => opts.Ignore())
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
@@ -179,7 +180,6 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.State, opts => opts.Ignore())
         .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
         .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
         .ReverseMap();
       #endregion
 
