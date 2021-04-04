@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Operations.Account;
 using Fixit.Core.DataContracts.Users.Account;
+using Fixit.Core.DataContracts.Users.Profile;
 using System.Linq;
 
 namespace Fixit.User.Management.ServerlessApi.Helpers
@@ -105,7 +106,10 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
         {
 
           bool isValidAddress = userProfileInformationDeserialized.Address != null && !HasNullOrEmpty(userProfileInformationDeserialized.Address);
-          isValid = !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.FirstName) && !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.LastName) && isValidAddress;
+          isValid = !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.FirstName)
+                    && !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.LastName)
+                    && IsUserAvailabilityValid(userProfileInformationDeserialized.Availability)
+                    && isValidAddress;
 
           if (isValid)
           {
@@ -167,6 +171,16 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
              || string.IsNullOrWhiteSpace(addressDto.Country)
              || string.IsNullOrWhiteSpace(addressDto.PostalCode)
              || string.IsNullOrWhiteSpace(addressDto.PhoneNumber);
+    }
+
+    public static bool IsUserAvailabilityValid(UserAvailabilityDto userAvailabilityDto)
+    {
+      var isValid = true;
+      if (userAvailabilityDto != null && userAvailabilityDto.Type == AvailabilityType.Custom && userAvailabilityDto.Schedule == null)
+      {
+        isValid = false;
+      }
+      return isValid;
     }
     #endregion
 

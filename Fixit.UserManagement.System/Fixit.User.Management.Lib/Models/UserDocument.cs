@@ -7,6 +7,7 @@ using Fixit.Core.DataContracts.Users;
 using Fixit.Core.DataContracts.Users.Address;
 using Fixit.Core.DataContracts.Users.Documents;
 using Fixit.Core.DataContracts.Users.Enums;
+using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.Core.DataContracts.Users.Skills;
 
 namespace Fixit.User.Management.Lib.Models
@@ -40,6 +41,9 @@ namespace Fixit.User.Management.Lib.Models
 
     [DataMember]
     public UserStatusDto Status { get; set; }
+
+    [DataMember]
+    public UserAvailabilityDto Availability { get; set; }
 
     [DataMember]
     public IEnumerable<SkillDto> Skills { get; set; }

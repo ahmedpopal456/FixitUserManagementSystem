@@ -1,24 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
-using Fixit.Core.Database.DataContracts.Documents;
+using Fixit.Core.Connectors.DataContracts;
 using Fixit.Core.Connectors.Mediators;
+using Fixit.Core.Database.DataContracts.Documents;
 using Fixit.Core.DataContracts;
 using Fixit.Core.Database.Mediators;
 using Fixit.Core.DataContracts.Users.Operations.Profile;
 using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.Core.DataContracts.Users.Enums;
-using Fixit.User.Management.Lib.Models;
-using Microsoft.Extensions.Configuration;
 using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.DataContracts.Users.Operations.Account;
-using Fixit.Core.Connectors.DataContracts;
-using System.Runtime.CompilerServices;
-using Microsoft.Azure.Cosmos;
-using System.Collections.Generic;
 using Fixit.Core.DataContracts.Users;
+using Fixit.User.Management.Lib.Models;
+using Fixit.User.Management.Lib.EnumExtension;
+using Microsoft.Azure.Cosmos;
+using Microsoft.Extensions.Configuration;
 
 [assembly: InternalsVisibleTo("Fixit.User.Management.Lib.UnitTests")]
 [assembly: InternalsVisibleTo("Fixit.User.Management.ServerlessApi")]
@@ -102,10 +103,10 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
     }
 
     #region UserAccountConfiguration
-    public async Task<UserAccountCreateRequestDto> CreateUserAsync(UserAccountCreateRequestDto userAccountCreateRequestDto, CancellationToken cancellationToken)
+    public async Task<UserAccountDto> CreateUserAsync(UserAccountCreateRequestDto userAccountCreateRequestDto, CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
-      UserAccountCreateRequestDto result = new UserAccountCreateRequestDto()
+      UserAccountDto result = new UserAccountDto()
       {
         IsOperationSuccessful = false,
       };
@@ -115,7 +116,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       if (userDocumentCollection.IsOperationSuccessful)
       {
         UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
-        result = _mapper.Map<UserDocument, UserAccountCreateRequestDto>(userDocument);
+        result = _mapper.Map<UserDocument, UserAccountDto>(userDocument);
 
         if (userDocument == null)
         {
@@ -126,9 +127,14 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           userDocumentToCreate.UpdatedTimestampsUtc = currentTime;
           userDocumentToCreate.CreatedTimestampsUtc = currentTime;
           userDocumentToCreate.State = UserState.Enabled;
+          userDocumentToCreate.Availability = new UserAvailabilityDto
+          {
+            Type = AvailabilityType.BusinessHours,
+            Schedule = AvailabilityType.BusinessHours.GetAvailability()
+          };
 
           CreateDocumentDto<UserDocument> createdUser = await _databaseUserTable.CreateItemAsync(userDocumentToCreate, partitionKey, cancellationToken);
-          result = _mapper.Map<CreateDocumentDto<UserDocument>, UserAccountCreateRequestDto>(createdUser);
+          result = _mapper.Map<CreateDocumentDto<UserDocument>, UserAccountDto>(createdUser);
         }
       }
 
@@ -147,30 +153,30 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       result.OperationException = userDocumentCollection.OperationException;
       if (userDocumentCollection.IsOperationSuccessful)
       {
-          UserDocument userDocumentToUpdate = userDocumentCollection.Results.SingleOrDefault();
-        
-          if (userDocumentToUpdate != null)
-          { 
-            result = _mapper.Map<UserDocument, UserAccountStateDto>(userDocumentToUpdate);
-            bool shouldBlockSignIn = userAccountStateDto.State.Equals(UserState.Disabled);
-            var userAdUpdateResponse = await _msGraphClient.UpdateAccountSignInStatusAsync(userDocumentToUpdate.id, shouldBlockSignIn, cancellationToken);
-            result = _mapper.Map<ConnectorDto<UserAccountStateDto>, UserAccountStateDto>(userAdUpdateResponse, result);
+        UserDocument userDocumentToUpdate = userDocumentCollection.Results.SingleOrDefault();
+
+        if (userDocumentToUpdate != null)
+        {
+          result = _mapper.Map<UserDocument, UserAccountStateDto>(userDocumentToUpdate);
+          bool shouldBlockSignIn = userAccountStateDto.State.Equals(UserState.Disabled);
+          var userAdUpdateResponse = await _msGraphClient.UpdateAccountSignInStatusAsync(userDocumentToUpdate.id, shouldBlockSignIn, cancellationToken);
+          result = _mapper.Map<ConnectorDto<UserAccountStateDto>, UserAccountStateDto>(userAdUpdateResponse, result);
+
+          if (result.IsOperationSuccessful)
+          {
+            userDocumentToUpdate.State = userAccountStateDto.State;
+            userDocumentToUpdate.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
+
+            string partitionKey = userDocumentToUpdate.Role.ToString();
+            var databaseUpdateResponse = await _databaseUserTable.UpsertItemAsync(userDocumentToUpdate, partitionKey, cancellationToken);
+            result = _mapper.Map<OperationStatus, UserAccountStateDto>(databaseUpdateResponse, result);
 
             if (result.IsOperationSuccessful)
             {
-              userDocumentToUpdate.State = userAccountStateDto.State;
-              userDocumentToUpdate.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
-
-              string partitionKey = userDocumentToUpdate.Role.ToString();
-              var databaseUpdateResponse = await _databaseUserTable.UpsertItemAsync(userDocumentToUpdate, partitionKey, cancellationToken);
-              result = _mapper.Map<OperationStatus, UserAccountStateDto>(databaseUpdateResponse, result);
-
-              if (result.IsOperationSuccessful)
-              {
-                result = _mapper.Map<UserDocument, UserAccountStateDto>(userDocumentToUpdate, result);
-              }
+              result = _mapper.Map<UserDocument, UserAccountStateDto>(userDocumentToUpdate, result);
             }
           }
+        }
       }
       return result;
     }
@@ -256,7 +262,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
     public async Task<UserProfileInformationDto> UpdateUserProfileAsync(Guid userId, UserProfileUpdateRequestDto userProfileUpdateRequestDto, CancellationToken cancellationToken)
     {
       cancellationToken.ThrowIfCancellationRequested();
-      UserProfileInformationDto result = default(UserProfileInformationDto);
+      UserProfileInformationDto result = default;
 
       var (userDocumentCollection, continuationToken) = await _databaseUserTable.GetItemQueryableAsync<UserDocument>(null, cancellationToken, userDocument => userDocument.id == userId.ToString());
       if (userDocumentCollection != null)
@@ -274,6 +280,10 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
             string partitionKey = userDocument.Role.ToString();
             userDocument = _mapper.Map<UserProfileUpdateRequestDto, UserDocument>(userProfileUpdateRequestDto, userDocument);
             userDocument.UpdatedTimestampsUtc = DateTimeOffset.Now.ToUnixTimeSeconds();
+            if (userDocument.Availability.Type != AvailabilityType.Custom)
+            {
+              userDocument.Availability.Schedule = userDocument.Availability.Type.GetAvailability();
+            }
 
             var operationStatus = await _databaseUserTable.UpsertItemAsync(userDocument, partitionKey, cancellationToken);
             result.OperationException = operationStatus.OperationException;

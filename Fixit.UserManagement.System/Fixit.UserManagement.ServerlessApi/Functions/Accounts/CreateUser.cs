@@ -1,18 +1,19 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
+using Aliencube.AzureFunctions.Extensions.OpenApi.Core.Attributes;
+using Fixit.Core.DataContracts.Users.Operations.Account;
+using Fixit.Core.DataContracts.Users.Account;
+using Fixit.Core.Security.Authorization.AzureFunctions;
+using Fixit.User.Management.Lib.Mediators;
+using Fixit.User.Management.ServerlessApi.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
-using Fixit.Core.Security.Authorization.AzureFunctions;
-using Fixit.User.Management.Lib.Mediators;
-using AutoMapper;
-using Aliencube.AzureFunctions.Extensions.OpenApi.Core.Attributes;
-using System.Net;
 using Microsoft.OpenApi.Models;
-using System.Net.Http;
-using System.Threading;
-using Fixit.User.Management.ServerlessApi.Helpers;
-using Fixit.Core.DataContracts.Users.Operations.Account;
 
 namespace Fixit.User.Management.ServerlessApi.Functions.Accounts
 {
@@ -31,7 +32,7 @@ namespace Fixit.User.Management.ServerlessApi.Functions.Accounts
     [FunctionName("CreateUser")]
     [OpenApiOperation("post", "UserAccount")]
     [OpenApiRequestBody("application/json", typeof(UserAccountCreateRequestDto), Required = true)]
-    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(UserAccountCreateRequestDto))]
+    [OpenApiResponseWithBody(HttpStatusCode.OK, "application/json", typeof(UserAccountDto))]
     public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "me/account")]
                                          HttpRequestMessage httpRequest,
                                          CancellationToken cancellationToken)

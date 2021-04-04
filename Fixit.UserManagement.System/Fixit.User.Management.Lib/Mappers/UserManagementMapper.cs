@@ -28,7 +28,18 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(userCreate => userCreate.Role, opts => opts.MapFrom(document => document != null ? document.Role : default))
         .ReverseMap();
 
-      CreateMap<UserAccountCreateRequestDto, CreateDocumentDto<UserDocument>>()
+      CreateMap<UserDocument, UserAccountDto>()
+        .ForMember(userCreate => userCreate.Id, opts => opts.MapFrom(document => document != null ? document.id : default))
+        .ForMember(userCreate => userCreate.UserPrincipalName, opts => opts.MapFrom(document => document != null ? document.UserPrincipalName : default))
+        .ForMember(userCreate => userCreate.FirstName, opts => opts.MapFrom(document => document != null ? document.FirstName : default))
+        .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
+        .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
+        .ForMember(userCreate => userCreate.Role, opts => opts.MapFrom(document => document != null ? document.Role : default))
+        .ForMember(userCreate => userCreate.Skills, opts => opts.MapFrom(document => document != null ? document.Skills : default))
+        .ForMember(userCreate => userCreate.Availability, opts => opts.MapFrom(document => document != null ? document.Availability : default))
+        .ReverseMap();
+
+      CreateMap<UserAccountDto, CreateDocumentDto<UserDocument>>()
         .ForMember(createdDocumentDto => createdDocumentDto.Document, opts => opts.MapFrom(user => user))
         .ForMember(createdDocumentDto => createdDocumentDto.IsOperationSuccessful, opts => opts.MapFrom(userRole => userRole != null ? userRole.IsOperationSuccessful : default))
         .ForMember(createdDocumentDto => createdDocumentDto.OperationException, opts => opts.MapFrom(userRole => userRole != null ? userRole.OperationException : default))
@@ -87,6 +98,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.Role, opts => opts.Ignore())
         .ForMember(document => document.State, opts => opts.Ignore())
         .ForMember(document => document.Status, opts => opts.Ignore())
+        .ForMember(document => document.Availability, opts => opts.Ignore())
         .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
         .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
@@ -96,6 +108,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
         .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
+        .ForMember(document => document.Availability, opts => opts.MapFrom(dto => dto != null ? dto.Availability : default))
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.Documents, opts => opts.Ignore())
         .ForMember(document => document.EntityId, opts => opts.Ignore())
@@ -114,6 +127,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
         .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
+        .ForMember(document => document.Availability, opts => opts.MapFrom(dto => dto != null ? dto.Availability : default))
         .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.Documents, opts => opts.Ignore())
         .ForMember(document => document.EntityId, opts => opts.Ignore())
@@ -144,6 +158,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
         .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
+        .ForMember(document => document.Availability, opts => opts.Ignore())
         .ReverseMap();
 
       CreateMap<UserProfilePictureDto, UserDocument>()
@@ -162,6 +177,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
         .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
         .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
+        .ForMember(document => document.Availability, opts => opts.Ignore())
         .ReverseMap();
 
       CreateMap<UserSummaryResponseDto, UserDocument>()
