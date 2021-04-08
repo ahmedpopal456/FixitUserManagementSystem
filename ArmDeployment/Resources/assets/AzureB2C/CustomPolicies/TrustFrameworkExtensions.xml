@@ -56,7 +56,7 @@
 
       <ClaimType Id="role">
         <DisplayName>User role</DisplayName>
-        <DataType>long</DataType>
+        <DataType>int</DataType>
         <UserInputType>DropdownSingleSelect</UserInputType>
         <Restriction>
           <Enumeration Text="Client" Value="0" SelectByDefault="false" />
@@ -68,26 +68,7 @@
       <ClaimType Id="userId">
         <DataType>long</DataType>
       </ClaimType>
-
-      <ClaimType Id="userCreateRequestBody">
-        <DisplayName>Request body for create user operation</DisplayName>
-        <DataType>string</DataType>
-      </ClaimType>
     </ClaimsSchema>
-
-    <ClaimsTransformations>
-      <ClaimsTransformation Id="GenerateCreateUserRequestBody" TransformationMethod="GenerateJson">
-        <InputClaims>
-          <InputClaim ClaimTypeReferenceId="givenName" TransformationClaimType="firstName" />
-          <InputClaim ClaimTypeReferenceId="surname" TransformationClaimType="lastName" />
-          <InputClaim ClaimTypeReferenceId="userPrincipalName" TransformationClaimType="userPrincipalName" />
-          <InputClaim ClaimTypeReferenceId="role" TransformationClaimType="role" />
-        </InputClaims>
-        <OutputClaims>
-          <OutputClaim ClaimTypeReferenceId="userCreateRequestBody" TransformationClaimType="outputClaim"/>
-        </OutputClaims>
-      </ClaimsTransformation>
-    </ClaimsTransformations> 
 
     <ContentDefinitions>
       <ContentDefinition Id="api.signin">
@@ -186,8 +167,8 @@
       <TechnicalProfiles>
         <TechnicalProfile Id="AAD-Common">
           <Metadata>
-            <Item Key="ClientId">c445b297-18c5-4d8c-8fbe-abae9124bf15</Item>
-            <Item Key="ApplicationObjectId">020aa92a-565b-4900-b825-4e42605ac7e2</Item>
+            <Item Key="ClientId">{{AADClientId}}</Item>
+            <Item Key="ApplicationObjectId">{{AADAppObjectId}}</Item>
           </Metadata>
         </TechnicalProfile>
       </TechnicalProfiles>
@@ -196,7 +177,6 @@
     <ClaimsProvider>
       <DisplayName>REST APIs</DisplayName>
       <TechnicalProfiles>
-
         <!-- Custom Restful service -->
         <TechnicalProfile Id="REST-API-SignUp">
           <DisplayName>Create new user in CosmosDB upon sign up</DisplayName>
@@ -210,15 +190,79 @@
             <Item Key="AllowInsecureAuthInProduction">true</Item>
           </Metadata>
           <InputClaims>
-            <InputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="firstname" />
-            <InputClaim ClaimTypeReferenceId="surname" PartnerClaimType="lastname" />
-            <InputClaim ClaimTypeReferenceId="userPrincipalName" />
-            <InputClaim ClaimTypeReferenceId="role" />
-            <InputClaim ClaimTypeReferenceId="objectId" />
+            <InputClaim ClaimTypeReferenceId="givenName" PartnerClaimType="FirstName" />
+            <InputClaim ClaimTypeReferenceId="surname" PartnerClaimType="LastName" />
+            <InputClaim ClaimTypeReferenceId="objectId" PartnerClaimType="Id" />
+            <InputClaim ClaimTypeReferenceId="email" PartnerClaimType="UserPrincipalName" />
+            <InputClaim ClaimTypeReferenceId="Role" PartnerClaimType="Role" />
           </InputClaims>
           <UseTechnicalProfileForSessionManagement ReferenceId="SM-Noop" />
         </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
 
+    <ClaimsProvider>
+      <DisplayName>Azure Active Directory</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="AAD-UserReadUsingObjectId">
+          <Metadata>
+            <Item Key="Operation">Read</Item>
+            <Item Key="RaiseErrorIfClaimsPrincipalDoesNotExist">true</Item>
+          </Metadata>
+          <IncludeInSso>false</IncludeInSso>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="objectId" Required="true" />
+          </InputClaims>
+          <OutputClaims>
+            <!-- Optional claims -->
+            <OutputClaim ClaimTypeReferenceId="signInNames.emailAddress" />
+            <OutputClaim ClaimTypeReferenceId="displayName" />
+            <OutputClaim ClaimTypeReferenceId="otherMails" />
+            <OutputClaim ClaimTypeReferenceId="givenName" />
+            <OutputClaim ClaimTypeReferenceId="surname" />
+            <OutputClaim ClaimTypeReferenceId="userPrincipalName" />
+          </OutputClaims>
+          <IncludeTechnicalProfile ReferenceId="AAD-Common" />
+        </TechnicalProfile>
+      </TechnicalProfiles>
+    </ClaimsProvider>
+
+    <ClaimsProvider>
+      <DisplayName>Local Account</DisplayName>
+      <TechnicalProfiles>
+        <TechnicalProfile Id="LocalAccountSignUpWithLogonEmail">
+          <DisplayName>Email signup</DisplayName>
+          <Protocol Name="Proprietary" Handler="Web.TPEngine.Providers.SelfAssertedAttributeProvider, Web.TPEngine, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" />
+          <Metadata>
+            <Item Key="IpAddressClaimReferenceId">IpAddress</Item>
+            <Item Key="ContentDefinitionReferenceId">api.localaccountsignup</Item>
+            <Item Key="language.button_continue">Create</Item>
+          </Metadata>
+          <CryptographicKeys>
+            <Key Id="issuer_secret" StorageReferenceId="B2C_1A_TokenSigningKeyContainer" />
+          </CryptographicKeys>
+          <InputClaims>
+            <InputClaim ClaimTypeReferenceId="email" />
+          </InputClaims>
+          <OutputClaims>
+            <OutputClaim ClaimTypeReferenceId="objectId" />
+            <!-- Optional claims, to be collected from the user -->
+            <OutputClaim ClaimTypeReferenceId="givenName" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="surName" Required="true" />
+            <!-- End of optional claims -->
+            <OutputClaim ClaimTypeReferenceId="role" />
+            <OutputClaim ClaimTypeReferenceId="email" PartnerClaimType="Verified.Email" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="newPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="reenterPassword" Required="true" />
+            <OutputClaim ClaimTypeReferenceId="executed-SelfAsserted-Input" DefaultValue="true" />
+            <OutputClaim ClaimTypeReferenceId="authenticationSource" />
+            <OutputClaim ClaimTypeReferenceId="newUser" />
+          </OutputClaims>
+          <ValidationTechnicalProfiles>
+            <ValidationTechnicalProfile ReferenceId="AAD-UserWriteUsingLogonEmail" />
+          </ValidationTechnicalProfiles>
+          <UseTechnicalProfileForSessionManagement ReferenceId="SM-AAD" />
+        </TechnicalProfile>
       </TechnicalProfiles>
     </ClaimsProvider>
   </ClaimsProviders>
@@ -291,7 +335,6 @@
             <ClaimsExchange Id="AADUserReadWithObjectId" TechnicalProfileReferenceId="AAD-UserReadUsingObjectId" />
           </ClaimsExchanges>
         </OrchestrationStep>
-        <!-- <OrchestrationStep Order="3" Type="SendClaims" CpimIssuerTechnicalProfileReferenceId="JwtIssuer" /> -->
       </OrchestrationSteps>
     </SubJourney>
   </SubJourneys>
