@@ -14,6 +14,10 @@ variable "location_name" {
   type = string
 }
 
+variable "google_api_key" {
+    type    = string
+}
+
 variable "organization_name" {
   type    = string
   default = "fixit"
