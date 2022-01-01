@@ -1,0 +1,28 @@
+{
+  "version": "2.0",
+  "logging": {
+    "applicationInsights": {
+      "samplingExcludedTypes": "Request",
+      "samplingSettings": {
+        "isEnabled": true
+      }
+    }
+  },
+  "openApi": {
+    "info": {
+      "version": "3.0.0",
+      "title": "Insight Management Service (EMPOWER INC.)",
+      "description": "Empower's Insight Management Service, using Open API specification - from **host.json**.",
+      "termsOfService": "https://empower.social/",
+      "contact": {
+        "name": "Ahmed Popal",
+        "email": "ahmed@empower.social",
+        "url": "https://empower.social/"
+      },
+      "license": {
+        "name": "MIT",
+        "url": "http://opensource.org/licenses/MIT"
+      }
+    }
+  }
+}
