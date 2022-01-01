@@ -53,7 +53,7 @@ resource "azurerm_function_app" "main" {
     "APPINSIGHTS_INSTRUMENTATIONKEY"  = data.azurerm_application_insights.main.instrumentation_key,
     "WEBSITE_NODE_DEFAULT_VERSION"    = "10.14.1"
     "FUNCTIONS_WORKER_RUNTIME"        = "dotnet",
-    "FIXIT-UM-CONN-GOOGLEAPI-KEY"     = var.google_api_key
+    "FIXIT-UM-CONN-GOOGLEAPI-KEY"     = var.google_api_key,
     "FIXIT-UM-DB-EP" : data.azurerm_cosmosdb_account.main.endpoint,
     "FIXIT-UM-DB-KEY" : data.azurerm_cosmosdb_account.main.primary_key,
     "FIXIT-UM-DB-NAME" : var.organization_name,
