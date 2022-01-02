@@ -7,7 +7,6 @@ using Fixit.Core.DataContracts.Users.Operations.Account;
 using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.DataContracts.Users.Profile;
 using System.Linq;
-using Fixit.Core.DataContracts.Users.Address.Obsolete;
 using Fixit.Core.DataContracts.Users.Address;
 
 namespace Fixit.User.Management.ServerlessApi.Helpers
@@ -135,11 +134,9 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
         if (userProfileInformationDeserialized != null)
         {
 
-          bool isValidAddress = userProfileInformationDeserialized.Address != null && !HasNullOrEmpty(userProfileInformationDeserialized.Address);
           isValid = !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.FirstName)
                     && !string.IsNullOrWhiteSpace(userProfileInformationDeserialized.LastName)
-                    && IsUserAvailabilityValid(userProfileInformationDeserialized.Availability)
-                    && isValidAddress;
+                    && IsUserAvailabilityValid(userProfileInformationDeserialized.Availability);
 
           if (isValid)
           {
@@ -191,16 +188,6 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
       }
 
       return isValid;
-    }
-
-    public static bool HasNullOrEmpty(Core.DataContracts.Users.Address.Obsolete.ObsoleteAddressDto addressDto)
-    {
-      return string.IsNullOrWhiteSpace(addressDto.Address)
-             || string.IsNullOrWhiteSpace(addressDto.City)
-             || string.IsNullOrWhiteSpace(addressDto.Province)
-             || string.IsNullOrWhiteSpace(addressDto.Country)
-             || string.IsNullOrWhiteSpace(addressDto.PostalCode)
-             || string.IsNullOrWhiteSpace(addressDto.PhoneNumber);
     }
 
     public static bool IsUserAvailabilityValid(UserAvailabilityDto userAvailabilityDto)

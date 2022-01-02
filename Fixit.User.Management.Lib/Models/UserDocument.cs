@@ -9,7 +9,6 @@ using Fixit.Core.DataContracts.Users.Documents;
 using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Profile;
 using Fixit.Core.DataContracts.Users.Skill;
-using ObsoleteAddressDto = Fixit.Core.DataContracts.Users.Address.Obsolete.ObsoleteAddressDto;
 
 namespace Fixit.User.Management.Lib.Models
 {
@@ -30,10 +29,6 @@ namespace Fixit.User.Management.Lib.Models
 
     [DataMember]
     public UserState State { get; set; }
-
-    [DataMember]
-    [Obsolete]
-    public ObsoleteAddressDto Address { get; set; }
 
     [DataMember]
     public List<UserAddressDto> SavedAddresses { get; set; } 
@@ -81,15 +76,6 @@ namespace Fixit.User.Management.Lib.Models
         },
         UserPrincipalName = "johnDoe@test.com",
         Role = UserRole.Client,
-        Address = new ObsoleteAddressDto()
-        {
-          Address = "123 Something",
-          City = "Montreal",
-          Province = "Quebec",
-          Country = "Canada",
-          PostalCode = "A1A 1A1",
-          PhoneNumber = "514-123-4567"
-        }
       };
 
       UserDocument secondUserDocument = null;

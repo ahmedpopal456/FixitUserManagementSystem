@@ -941,7 +941,6 @@ namespace Fixit.User.Management.Lib.UnitTests.Mediators
       Assert.IsNull(actionResult.OperationException);
       Assert.AreEqual(userProfileUpdateRequestDto.FirstName, actionResult.FirstName);
       Assert.AreEqual(userProfileUpdateRequestDto.LastName, actionResult.LastName);
-      Assert.AreEqual(userProfileUpdateRequestDto.Address, actionResult.Address);
     }
     #endregion
 

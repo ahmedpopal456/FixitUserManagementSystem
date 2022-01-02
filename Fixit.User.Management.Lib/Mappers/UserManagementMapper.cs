@@ -91,96 +91,40 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
-        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
-        .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.Documents, opts => opts.Ignore())
-        .ForMember(document => document.EntityId, opts => opts.Ignore())
-        .ForMember(document => document.Gender, opts => opts.Ignore())
-        .ForMember(document => document.id, opts => opts.Ignore())
-        .ForMember(document => document.Role, opts => opts.Ignore())
-        .ForMember(document => document.State, opts => opts.Ignore())
-        .ForMember(document => document.Status, opts => opts.Ignore())
-        .ForMember(document => document.Availability, opts => opts.Ignore())
-        .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
-        .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
-        .ReverseMap();
+        .ForAllOtherMembers(item => item.Ignore());
+
+      CreateMap<UserProfileDto, UserDocument>()
+        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
+        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
+        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
+        .ForAllOtherMembers(item => item.Ignore());
 
       CreateMap<UserProfileUpdateRequestDto, UserDocument>()
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
-        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
         .ForMember(document => document.Availability, opts => opts.MapFrom(dto => dto != null ? dto.Availability : default))
-        .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.Documents, opts => opts.Ignore())
-        .ForMember(document => document.EntityId, opts => opts.Ignore())
-        .ForMember(document => document.Gender, opts => opts.Ignore())
-        .ForMember(document => document.id, opts => opts.Ignore())
-        .ForMember(document => document.ProfilePictureUrl, opts => opts.Ignore())
-        .ForMember(document => document.Role, opts => opts.Ignore())
-        .ForMember(document => document.State, opts => opts.Ignore())
-        .ForMember(document => document.Status, opts => opts.Ignore())
-        .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
-        .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
-        .ReverseMap();
+        .ForAllOtherMembers(item => item.Ignore());
 
       CreateMap<UserProfileInformationDto, UserDocument>()
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
-        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null ? dto.Address : default))
         .ForMember(document => document.Availability, opts => opts.MapFrom(dto => dto != null ? dto.Availability : default))
-        .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.Documents, opts => opts.Ignore())
-        .ForMember(document => document.EntityId, opts => opts.Ignore())
-        .ForMember(document => document.Gender, opts => opts.Ignore())
-        .ForMember(document => document.id, opts => opts.Ignore())
-        .ForMember(document => document.ProfilePictureUrl, opts => opts.Ignore())
-        .ForMember(document => document.Role, opts => opts.Ignore())
-        .ForMember(document => document.State, opts => opts.Ignore())
-        .ForMember(document => document.Status, opts => opts.Ignore())
-        .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
-        .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
-        .ReverseMap();
+        .ForAllOtherMembers(item => item.Ignore());
+
+      CreateMap<UserDocument, UserProfileInformationDto>()
+        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
+        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
+        .ForMember(document => document.Availability, opts => opts.MapFrom(dto => dto != null ? dto.Availability : default))
+        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null && dto != null && dto.SavedAddresses != null ? dto.SavedAddresses.FirstOrDefault(item => item.IsCurrentAddress) : default))
+        .ForAllOtherMembers(item => item.Ignore());
 
       CreateMap<UserProfilePictureUpdateRequestDto, UserDocument>()
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
-        .ForMember(document => document.Address, opts => opts.Ignore())
-        .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.Documents, opts => opts.Ignore())
-        .ForMember(document => document.EntityId, opts => opts.Ignore())
-        .ForMember(document => document.FirstName, opts => opts.Ignore())
-        .ForMember(document => document.Gender, opts => opts.Ignore())
-        .ForMember(document => document.id, opts => opts.Ignore())
-        .ForMember(document => document.LastName, opts => opts.Ignore())
-        .ForMember(document => document.Role, opts => opts.Ignore())
-        .ForMember(document => document.State, opts => opts.Ignore())
-        .ForMember(document => document.Status, opts => opts.Ignore())
-        .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
-        .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
-        .ForMember(document => document.Availability, opts => opts.Ignore())
-        .ReverseMap();
+        .ForAllOtherMembers(item => item.Ignore());
 
       CreateMap<UserProfilePictureDto, UserDocument>()
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
-        .ForMember(document => document.Address, opts => opts.Ignore())
-        .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.Documents, opts => opts.Ignore())
-        .ForMember(document => document.EntityId, opts => opts.Ignore())
-        .ForMember(document => document.FirstName, opts => opts.Ignore())
-        .ForMember(document => document.Gender, opts => opts.Ignore())
-        .ForMember(document => document.id, opts => opts.Ignore())
-        .ForMember(document => document.LastName, opts => opts.Ignore())
-        .ForMember(document => document.Role, opts => opts.Ignore())
-        .ForMember(document => document.State, opts => opts.Ignore())
-        .ForMember(document => document.Status, opts => opts.Ignore())
-        .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
-        .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.UserPrincipalName, opts => opts.Ignore())
-        .ForMember(document => document.Availability, opts => opts.Ignore())
-        .ReverseMap();
+        .ForAllOtherMembers(item => item.Ignore());
 
       CreateMap<UserSummaryResponseDto, UserDocument>()
         .ForMember(document => document.SavedAddresses, opts => opts.MapFrom(dto => dto != null && dto.SavedAddresses != null ? dto.SavedAddresses : default))
@@ -191,15 +135,18 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.Role, opts => opts.MapFrom(dto => dto != null ? dto.Role : default))
         .ForMember(document => document.Status, opts => opts.MapFrom(dto => dto != null ? dto.Status : default))
         .ForMember(document => document.UserPrincipalName, opts => opts.MapFrom(dto => dto != null ? dto.UserPrincipalName : null))
-        .ForMember(document => document.id, opts => opts.Ignore())
-        .ForMember(document => document.Address, opts => opts.Ignore())
-        .ForMember(document => document.CreatedTimestampsUtc, opts => opts.Ignore())
-        .ForMember(document => document.Documents, opts => opts.Ignore())
-        .ForMember(document => document.Gender, opts => opts.Ignore())
-        .ForMember(document => document.State, opts => opts.Ignore())
-        .ForMember(document => document.TelephoneNumber, opts => opts.Ignore())
-        .ForMember(document => document.UpdatedTimestampsUtc, opts => opts.Ignore())
-        .ReverseMap();
+        .ForAllOtherMembers(item => item.Ignore());
+
+      CreateMap<UserDocument, UserSummaryResponseDto>()
+        .ForMember(document => document.SavedAddresses, opts => opts.MapFrom(dto => dto != null && dto.SavedAddresses != null ? dto.SavedAddresses : default))
+        .ForMember(document => document.Id, opts => opts.MapFrom(dto => dto != null ? Guid.Parse(dto.id) : default))
+        .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
+        .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
+        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
+        .ForMember(document => document.Role, opts => opts.MapFrom(dto => dto != null ? dto.Role : default))
+        .ForMember(document => document.Status, opts => opts.MapFrom(dto => dto != null ? dto.Status : default))
+        .ForMember(document => document.UserPrincipalName, opts => opts.MapFrom(dto => dto != null ? dto.UserPrincipalName : null))
+        .ForAllOtherMembers(item => item.Ignore());
       #endregion
 
       #region UserRatingConfiguration

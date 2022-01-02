@@ -148,7 +148,7 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
       if (userDocumentCollection.IsOperationSuccessful)
       {
         UserDocument userDocument = userDocumentCollection.Results.SingleOrDefault();
-        if (userDocument is { })
+        if (userDocument is { SavedAddresses: { } })
         {
           long currentTime = DateTimeOffset.Now.ToUnixTimeSeconds();
 
@@ -157,6 +157,12 @@ namespace Fixit.User.Management.Lib.Mediators.Internal
           {
             _mapper.Map<UserAddressUpsertRequestDto, UserAddressDto>(userAddressUpsertRequestDto, userAddressToUpdate);
             userAddressToUpdate.UpdatedTimestampUtc = currentTime;
+            if (userAddressToUpdate.IsCurrentAddress)
+            {
+              userDocument.SavedAddresses.Where(address => address.Id != userAddressToUpdate.Id)
+                                         .ToList()?
+                                         .ForEach(address => address.IsCurrentAddress = false);
+            }
 
             var updatedUser = await _databaseUserTable.UpsertItemAsync(userDocument, userDocument.EntityId, cancellationToken);
             if (updatedUser.IsOperationSuccessful)
