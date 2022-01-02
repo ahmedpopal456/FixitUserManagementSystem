@@ -66,6 +66,16 @@ namespace Fixit.User.Management.Lib.Models
       {
         ProfilePictureUrl = "something.something/something.png",
         FirstName = "John",
+        SavedAddresses = new List<UserAddressDto>() { 
+          new UserAddressDto() 
+        { 
+            Address = new AddressDto()
+            {
+              FormattedAddress = "",
+            },
+            Id = Guid.NewGuid(),
+            IsCurrentAddress = true,
+        }},
         LastName = "Doe",
         Skills = new List<SkillDto>
         {

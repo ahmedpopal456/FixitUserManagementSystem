@@ -93,10 +93,11 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
         .ForAllOtherMembers(item => item.Ignore());
 
-      CreateMap<UserProfileDto, UserDocument>()
+      CreateMap<UserDocument, UserProfileDto>()
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
+        .ForMember(document => document.Address, opts => opts.MapFrom(dto => dto != null && dto != null && dto.SavedAddresses != null ? dto.SavedAddresses.FirstOrDefault(item => item.IsCurrentAddress) : default))
         .ForAllOtherMembers(item => item.Ignore());
 
       CreateMap<UserProfileUpdateRequestDto, UserDocument>()
@@ -123,6 +124,10 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForAllOtherMembers(item => item.Ignore());
 
       CreateMap<UserProfilePictureDto, UserDocument>()
+        .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
+        .ForAllOtherMembers(item => item.Ignore());
+
+      CreateMap<UserDocument, UserProfilePictureDto > ()
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForAllOtherMembers(item => item.Ignore());
 
