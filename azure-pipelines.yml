@@ -25,6 +25,8 @@ variables:
 jobs:
 # master branch versioning
 - job: Build_Master_Version_Number
+  pool:
+    vmImage: 'ubuntu-latest'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/master')
   variables:
     masterMajorMinor: $(majorProductVersion).$(minorProductVersion)
@@ -36,6 +38,8 @@ jobs:
 
 # staging branch versioning
 - job: Build_Staging_Version_Number
+  pool:
+    vmImage: 'ubuntu-latest'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/staging')
   variables:
     stagingMajorMinor: $(majorProductVersion).$(minorProductVersion)-beta
@@ -47,6 +51,8 @@ jobs:
 
 # development branch versioning
 - job: Build_Development_Version_Number
+  pool:
+    vmImage: 'ubuntu-latest'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/development')
   variables:
     stagingMajorMinor: $(majorProductVersion).$(minorProductVersion)-alpha
@@ -58,6 +64,8 @@ jobs:
 
 # PR versioning for master branch, staging branch & development branch
 - job: Build_PullRequest_Version_Number
+  pool:
+    vmImage: 'ubuntu-latest'
   condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.SourceBranch'], 'refs/heads/staging'), ne(variables['Build.SourceBranch'], 'refs/heads/development'), eq(variables['Build.Reason'], 'PullRequest'))
   variables:
     pullRequestMajorMinor: $(majorProductVersion).$(minorProductVersion)-pre-alpha$(variables['system.pullrequest.pullrequestid'])
@@ -69,6 +77,8 @@ jobs:
 
 # Name branch prefix to build version (master branch & staging branch)
 - job: Build_Branch_Version_Number
+  pool:
+    vmImage: 'ubuntu-latest'
   condition: and(ne(variables['Build.SourceBranch'], 'refs/heads/master'), ne(variables['Build.SourceBranch'], 'refs/heads/staging'), ne(variables['Build.Reason'], 'PullRequest'))
   variables:
     branchMajorMinor: $(majorProductVersion).$(minorProductVersion)-br$(variables['build.sourcebranch'])
@@ -117,6 +127,7 @@ jobs:
   
   # Prepare Sonar Cloud Analysis
   - task: SonarCloudPrepare@1
+    continueOnError: true
     inputs:
       SonarCloud: 'fixit-sonarcloud'
       organization: 'fixit'
@@ -159,9 +170,11 @@ jobs:
 
   # Run Sonar Cloud Analysis
   - task: SonarCloudAnalyze@1
+    continueOnError: true
 
   # Publish Sonar Cloud Report 
   - task: SonarCloudPublish@1
+    continueOnError: true
     inputs:
       pollingTimeoutSec: '300'
 
