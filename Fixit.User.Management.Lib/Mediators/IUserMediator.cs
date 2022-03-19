@@ -20,7 +20,7 @@ namespace Fixit.User.Management.Lib.Mediators
     /// <param name="userId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<UserSummaryResponseDto> GetUserSummaryAsync(Guid userId, CancellationToken cancellationToken);
+    Task<OperationStatusWithObject<UserSummaryDto>> GetUserSummaryAsync(Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Get user profile

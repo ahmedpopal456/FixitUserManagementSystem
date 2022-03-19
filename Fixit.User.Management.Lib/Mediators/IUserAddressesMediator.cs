@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Fixit.Core.DataContracts;
 using Fixit.Core.DataContracts.Users.Address;
+using Fixit.Core.DataContracts.Users.Operations.Addresses;
 
 namespace Fixit.User.Management.Lib.Mediators
 {

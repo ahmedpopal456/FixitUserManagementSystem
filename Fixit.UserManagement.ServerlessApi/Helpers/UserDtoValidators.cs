@@ -8,6 +8,7 @@ using Fixit.Core.DataContracts.Users.Account;
 using Fixit.Core.DataContracts.Users.Profile;
 using System.Linq;
 using Fixit.Core.DataContracts.Users.Address;
+using Fixit.Core.DataContracts.Users.Operations.Addresses;
 
 namespace Fixit.User.Management.ServerlessApi.Helpers
 {

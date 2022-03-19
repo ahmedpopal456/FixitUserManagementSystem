@@ -21,6 +21,7 @@ using Fixit.User.Management.Lib.EnumExtension;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Fixit.Core.DataContracts.Users.Address;
+using Fixit.Core.DataContracts.Users.Operations.Addresses;
 
 [assembly: InternalsVisibleTo("Fixit.User.Management.Lib.UnitTests")]
 [assembly: InternalsVisibleTo("Fixit.User.Management.ServerlessApi")]

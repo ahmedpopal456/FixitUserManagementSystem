@@ -12,6 +12,8 @@ using Fixit.Core.DataContracts.Users.Ratings;
 using Fixit.Core.DataContracts.Users.Operations.Ratings;
 using Fixit.Core.DataContracts.Users.Address;
 using System;
+using Fixit.Core.DataContracts.Users;
+using Fixit.Core.DataContracts.Users.Operations.Addresses;
 
 namespace Fixit.User.Management.Lib.Mappers
 {
@@ -23,10 +25,10 @@ namespace Fixit.User.Management.Lib.Mappers
       CreateMap<UserDocument, UserAccountCreateRequestDto>()
         .ForMember(userCreate => userCreate.Id, opts => opts.MapFrom(document => document != null ? document.id : default))
         .ForMember(userCreate => userCreate.UserPrincipalName, opts => opts.MapFrom(document => document != null ? document.UserPrincipalName : default))
-        .ForMember(userCreate => userCreate.Skills, opts => opts.MapFrom(document => document != null ? document.Skills : default))
+        .ForMember(userCreate => userCreate.Licenses, opts => opts.MapFrom(document => document != null ? document.Licenses: default))
         .ForMember(userCreate => userCreate.FirstName, opts => opts.MapFrom(document => document != null ? document.FirstName : default))
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
-        .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
+        .ForMember(userCreate => userCreate.Availability, opts => opts.MapFrom(document => document != null ? document.Availability : default))
         .ForMember(userCreate => userCreate.Role, opts => opts.MapFrom(document => document != null ? document.Role : default))
         .ReverseMap();
 
@@ -37,7 +39,7 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
         .ForMember(userCreate => userCreate.LastName, opts => opts.MapFrom(document => document != null ? document.LastName : default))
         .ForMember(userCreate => userCreate.Role, opts => opts.MapFrom(document => document != null ? document.Role : default))
-        .ForMember(userCreate => userCreate.Skills, opts => opts.MapFrom(document => document != null ? document.Skills : default))
+        .ForMember(userCreate => userCreate.Licenses, opts => opts.MapFrom(document => document != null ? document.Licenses : default))
         .ForMember(userCreate => userCreate.Availability, opts => opts.MapFrom(document => document != null ? document.Availability : default))
         .ReverseMap();
 
@@ -131,8 +133,9 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.ProfilePictureUrl, opts => opts.MapFrom(dto => dto != null ? dto.ProfilePictureUrl : default))
         .ForAllOtherMembers(item => item.Ignore());
 
-      CreateMap<UserSummaryResponseDto, UserDocument>()
+      CreateMap<UserSummaryDto, UserDocument>()
         .ForMember(document => document.SavedAddresses, opts => opts.MapFrom(dto => dto != null && dto.SavedAddresses != null ? dto.SavedAddresses : default))
+        .ForMember(document => document.Licenses, opts => opts.MapFrom(dto => dto != null && dto.Licenses != null ? dto.Licenses : default))
         .ForMember(document => document.EntityId, opts => opts.MapFrom(dto => dto != null ? dto.Id : default))
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))
@@ -142,8 +145,9 @@ namespace Fixit.User.Management.Lib.Mappers
         .ForMember(document => document.UserPrincipalName, opts => opts.MapFrom(dto => dto != null ? dto.UserPrincipalName : null))
         .ForAllOtherMembers(item => item.Ignore());
 
-      CreateMap<UserDocument, UserSummaryResponseDto>()
+      CreateMap<UserDocument, UserSummaryDto>()
         .ForMember(document => document.SavedAddresses, opts => opts.MapFrom(dto => dto != null && dto.SavedAddresses != null ? dto.SavedAddresses : default))
+        .ForMember(document => document.Licenses, opts => opts.MapFrom(dto => dto != null && dto.Licenses != null ? dto.Licenses : default))
         .ForMember(document => document.Id, opts => opts.MapFrom(dto => dto != null ? Guid.Parse(dto.id) : default))
         .ForMember(document => document.FirstName, opts => opts.MapFrom(dto => dto != null ? dto.FirstName : default))
         .ForMember(document => document.LastName, opts => opts.MapFrom(dto => dto != null ? dto.LastName : default))

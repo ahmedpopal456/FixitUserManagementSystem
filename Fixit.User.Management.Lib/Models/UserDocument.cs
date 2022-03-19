@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Fixit.Core.Database;
+using Fixit.Core.DataContracts;
+using Fixit.Core.DataContracts.FixTemplates;
 using Fixit.Core.DataContracts.Seeders;
 using Fixit.Core.DataContracts.Users;
 using Fixit.Core.DataContracts.Users.Address;
@@ -46,7 +48,7 @@ namespace Fixit.User.Management.Lib.Models
     public UserAvailabilityDto Availability { get; set; }
 
     [DataMember]
-    public IEnumerable<SkillDto> Skills { get; set; }
+    public IEnumerable<LicenseDto> Licenses { get; set; }
 
     [DataMember]
     public string TelephoneNumber { get; set; }
@@ -77,9 +79,9 @@ namespace Fixit.User.Management.Lib.Models
             IsCurrentAddress = true,
         }},
         LastName = "Doe",
-        Skills = new List<SkillDto>
+        Licenses = new List<LicenseDto>
         {
-          new SkillDto
+          new LicenseDto
           {
             Name ="Hello"
           }   
