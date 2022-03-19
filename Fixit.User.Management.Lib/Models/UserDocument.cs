@@ -48,7 +48,7 @@ namespace Fixit.User.Management.Lib.Models
     public UserAvailabilityDto Availability { get; set; }
 
     [DataMember]
-    public IEnumerable<LicenseDto> Licenses { get; set; }
+    public IEnumerable<UserLicenseDto> Licenses { get; set; }
 
     [DataMember]
     public string TelephoneNumber { get; set; }
@@ -79,9 +79,9 @@ namespace Fixit.User.Management.Lib.Models
             IsCurrentAddress = true,
         }},
         LastName = "Doe",
-        Licenses = new List<LicenseDto>
+        Licenses = new List<UserLicenseDto>
         {
-          new LicenseDto
+          new UserLicenseDto
           {
             Name ="Hello"
           }   
