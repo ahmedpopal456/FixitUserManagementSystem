@@ -22,7 +22,7 @@ namespace Fixit.User.Management.Lib.Models
     [DataMember]
     public UserSummaryDto RatingsOfUser { get; set; }
 
-    [DataMember]
+    [DataMember]  
     public long CreatedTimestampUtc { get; set; }
 
     [DataMember]

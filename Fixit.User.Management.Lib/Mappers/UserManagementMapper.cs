@@ -14,6 +14,8 @@ using Fixit.Core.DataContracts.Users.Address;
 using System;
 using Fixit.Core.DataContracts.Users;
 using Fixit.Core.DataContracts.Users.Operations.Addresses;
+using Fixit.Core.DataContracts.Users.Operations.Licenses;
+using Fixit.Core.DataContracts.Users.License;
 
 namespace Fixit.User.Management.Lib.Mappers
 {
@@ -181,7 +183,6 @@ namespace Fixit.User.Management.Lib.Mappers
         .ReverseMap();
       #endregion
 
-
       #region UserAddressesConfiguration 
 
       CreateMap<UserAddressUpsertRequestDto, UserAddressDto>()
@@ -190,6 +191,11 @@ namespace Fixit.User.Management.Lib.Mappers
 
       #endregion
 
+      #region UserLicensesConfiguration
+      CreateMap<UserLicenseUpsertRequestDto, UserLicenseDto>()
+        .ForMember(userLicenseDto => userLicenseDto.Id, opts => opts.Ignore())
+        .ReverseMap();
+      #endregion
     }
   }
 }

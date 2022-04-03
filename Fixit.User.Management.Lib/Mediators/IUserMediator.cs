@@ -9,6 +9,7 @@ using Fixit.Core.DataContracts.Users.Operations.Account;
 using System.Collections.Generic;
 using Fixit.Core.DataContracts.Users;
 using Fixit.User.Management.Lib.Models;
+using Fixit.Core.DataContracts.Users.Operations;
 
 namespace Fixit.User.Management.Lib.Mediators
 {

@@ -7,10 +7,9 @@ using Fixit.Core.DataContracts.FixTemplates;
 using Fixit.Core.DataContracts.Seeders;
 using Fixit.Core.DataContracts.Users;
 using Fixit.Core.DataContracts.Users.Address;
-using Fixit.Core.DataContracts.Users.Documents;
 using Fixit.Core.DataContracts.Users.Enums;
 using Fixit.Core.DataContracts.Users.Profile;
-using Fixit.Core.DataContracts.Users.Skill;
+using Fixit.Core.DataContracts.Users.License;
 
 namespace Fixit.User.Management.Lib.Models
 {
@@ -48,7 +47,7 @@ namespace Fixit.User.Management.Lib.Models
     public UserAvailabilityDto Availability { get; set; }
 
     [DataMember]
-    public IEnumerable<UserLicenseDto> Licenses { get; set; }
+    public List<UserLicenseDto> Licenses { get; set; }
 
     [DataMember]
     public string TelephoneNumber { get; set; }
@@ -58,9 +57,6 @@ namespace Fixit.User.Management.Lib.Models
 
     [DataMember]
     public long UpdatedTimestampsUtc { get; set; }
-
-    [DataMember]
-    public IEnumerable<DocumentSummaryDto> Documents { get; set; }
 
     public new IList<UserDocument> SeedFakeDtos()
     {

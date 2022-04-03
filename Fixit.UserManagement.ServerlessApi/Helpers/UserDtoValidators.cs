@@ -9,6 +9,7 @@ using Fixit.Core.DataContracts.Users.Profile;
 using System.Linq;
 using Fixit.Core.DataContracts.Users.Address;
 using Fixit.Core.DataContracts.Users.Operations.Addresses;
+using Fixit.Core.DataContracts.Users.Operations.Licenses;
 
 namespace Fixit.User.Management.ServerlessApi.Helpers
 {
@@ -197,6 +198,33 @@ namespace Fixit.User.Management.ServerlessApi.Helpers
       if (userAvailabilityDto != null && userAvailabilityDto.Type == AvailabilityType.Custom && userAvailabilityDto.Schedule == null)
       {
         isValid = false;
+      }
+      return isValid;
+    }
+
+    public static bool IsValidUserLicenseUpsertRequest(HttpContent httpContent, out UserLicenseUpsertRequestDto userLicenseUpsertRequestDto) 
+    {
+      bool isValid = false;
+      userLicenseUpsertRequestDto = null;
+
+      try
+      {
+        var userLicenseUpsertRequestDtoDeserialized = JsonConvert.DeserializeObject<UserLicenseUpsertRequestDto>(httpContent.ReadAsStringAsync().Result);
+        if (userLicenseUpsertRequestDtoDeserialized != null)
+        {
+
+          isValid = !string.IsNullOrWhiteSpace(userLicenseUpsertRequestDtoDeserialized.AttachmentUrl) && !string.IsNullOrWhiteSpace(userLicenseUpsertRequestDtoDeserialized.Name);
+
+          if (isValid)
+          {
+            userLicenseUpsertRequestDto = userLicenseUpsertRequestDtoDeserialized;
+          }
+        }
+
+      }
+      catch
+      {
+        // Fall through 
       }
       return isValid;
     }
